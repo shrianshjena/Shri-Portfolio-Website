@@ -238,7 +238,7 @@ export const SITE: SiteContent = {
         tagline: "MARINE TECHNOLOGY VENTURE",
         description:
           "Technology venture delivering modern software and AI-integrated solutions to the marine and maritime industry, with expansion into fintech. Designed and shipped the production launch platform.",
-        url: "https://carltsolas.com",
+        url: "https://carltsolas-website.vercel.app",
         image: "/images/projects/project-carltsolas.png",
         status: "LIVE",
       },
