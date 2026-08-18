@@ -45,7 +45,7 @@ export function HeroSection({ data }: { readonly data: HeroContent }) {
       className="relative flex min-h-svh flex-col justify-center px-6 pb-16 pt-24 md:px-12 lg:px-20"
     >
       <div className="grid items-center gap-10 lg:grid-cols-[1fr_45%]">
-        <div>
+        <div className="min-w-0">
           <ScrambleText
             as="p"
             trigger="play"

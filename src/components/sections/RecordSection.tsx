@@ -95,12 +95,12 @@ function PhotoBandFigure({ band }: PhotoBandFigureProps) {
           alt={band.alt}
           fill
           sizes="100vw"
-          className="object-cover object-center grayscale-[35%]"
+          className="object-cover object-[center_30%] brightness-110 grayscale-[30%]"
         />
       </div>
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-ink-2/65 mix-blend-multiply"
+        className="absolute inset-0 bg-ink-2/35 mix-blend-multiply"
       />
       <div
         aria-hidden="true"

@@ -59,7 +59,9 @@ body {
 @utility display-hero {
   font-family: var(--font-display), sans-serif;
   font-weight: 400;
-  font-size: clamp(3.25rem, 11vw, 12.5rem);
+  /* Sized to fit the hero's text column beside the 3D scene; the min-content
+   * width of a larger scale pushes the grid's second column off-viewport. */
+  font-size: clamp(2.75rem, 7vw, 8.5rem);
   line-height: 0.98;
   letter-spacing: 0.005em;
   text-transform: uppercase;

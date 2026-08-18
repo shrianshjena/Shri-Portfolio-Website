@@ -83,13 +83,13 @@ export function EquityCurve({
         aria-label={curve.description}
         className="h-full w-full overflow-visible"
       >
+        {/* No vector-effect here: DrawSVG must be able to measure the path. */}
         <path
           className="equity-path"
           d={path}
           fill="none"
           stroke="var(--color-accent)"
           strokeWidth={2.5}
-          vectorEffect="non-scaling-stroke"
         />
         <circle
           className="equity-dot"

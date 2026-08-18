@@ -29,6 +29,7 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
   const [inView, setInView] = useState(false);
   const [tierOk, setTierOk] = useState(false);
   const [splineReady, setSplineReady] = useState(false);
+  const [posterFailed, setPosterFailed] = useState(false);
 
   useEffect(() => {
     const memory =
@@ -60,9 +61,10 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
         priority
         fetchPriority="high"
         sizes="(max-width: 1023px) 100vw, 45vw"
+        onError={() => setPosterFailed(true)}
         className={cn(
           "object-contain transition-opacity duration-1000",
-          splineReady && "opacity-0",
+          (splineReady || posterFailed) && "opacity-0",
         )}
       />
       {mountSpline ? (

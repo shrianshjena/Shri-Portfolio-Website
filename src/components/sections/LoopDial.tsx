@@ -20,21 +20,24 @@ const MAJOR_TICK_INNER_RADIUS = 84;
 const NEEDLE_POINTS = "104,3 116,3 110,15";
 
 interface DialTick {
-  readonly x1: number;
-  readonly y1: number;
-  readonly x2: number;
-  readonly y2: number;
+  readonly x1: string;
+  readonly y1: string;
+  readonly x2: string;
+  readonly y2: string;
   readonly isMajor: boolean;
 }
 
+/* Coordinates are rounded to fixed strings so the server and client render
+ * byte-identical SVG attributes (raw float trig differs in the last digit
+ * between environments and trips React hydration). */
 function polarPoint(
   radius: number,
   angleDeg: number,
-): readonly [number, number] {
+): readonly [string, string] {
   const angleRad = (angleDeg * Math.PI) / 180;
   return [
-    DIAL_CENTER + radius * Math.sin(angleRad),
-    DIAL_CENTER - radius * Math.cos(angleRad),
+    (DIAL_CENTER + radius * Math.sin(angleRad)).toFixed(2),
+    (DIAL_CENTER - radius * Math.cos(angleRad)).toFixed(2),
   ];
 }
 
