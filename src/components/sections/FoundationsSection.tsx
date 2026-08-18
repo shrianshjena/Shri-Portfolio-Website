@@ -147,8 +147,8 @@ function EducationRow({ entry, featured }: EducationRowProps) {
         <p className="eyebrow mt-1 text-steel">{entry.credential}</p>
         <p
           className={cn(
-            "mono-nums mt-3 text-accent",
-            featured ? "text-2xl" : "text-base",
+            "mono-nums mt-3",
+            featured ? "text-2xl text-accent" : "text-base text-steel",
           )}
         >
           {entry.detail}

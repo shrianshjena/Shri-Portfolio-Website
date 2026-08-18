@@ -55,7 +55,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="bg-canvas text-fg">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{
+            /* Escape < so no content string can ever close the script tag. */
+            __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         <AppProviders>{children}</AppProviders>
       </body>

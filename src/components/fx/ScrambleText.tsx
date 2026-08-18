@@ -116,15 +116,17 @@ export function ScrambleText({
     { scope: hostRef, dependencies: [play], revertOnUpdate: true },
   );
 
+  /* The accessible copy is a real sr-only text node (aria-label is invalid
+   * on generic roles like p/span); the animated twin stays aria-hidden. */
   return (
     <Tag
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={hostRef as any}
       id={id}
-      aria-label={children}
       className={cn("relative block", className)}
       style={style}
     >
+      <span className="sr-only">{children}</span>
       <span aria-hidden="true" ref={textRef} className="block">
         {children}
       </span>

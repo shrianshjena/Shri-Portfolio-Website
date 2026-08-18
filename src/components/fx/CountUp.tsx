@@ -1,14 +1,18 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, ScrollTrigger } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { MEDIA } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
 /*
  * Number count-up. The final value is server-rendered (SEO and reduced
  * motion see it immediately); on capable clients the number animates from 0
- * once, when scrolled into view. Tabular numerals prevent width jitter.
+ * once, when actually visible. Visibility comes from IntersectionObserver
+ * rather than ScrollTrigger so the animation also times correctly inside
+ * horizontally translated pinned tracks (the Desk chapter), where document
+ * scroll position says nothing about whether the panel is on screen.
+ * Tabular numerals prevent width jitter.
  */
 interface CountUpProps {
   readonly value: number;
@@ -41,11 +45,10 @@ export function CountUp({
       const proxy = { current: 0 };
       el.textContent = format(0);
 
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
           gsap.to(proxy, {
             current: value,
             duration,
@@ -55,7 +58,10 @@ export function CountUp({
             },
           });
         },
-      });
+        { threshold: 0.5 },
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
     },
     { scope: ref },
   );

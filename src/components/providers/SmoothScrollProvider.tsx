@@ -31,6 +31,12 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
 
+    /* The preloader mounts before Lenis exists and locks scroll with a
+     * class; honor a lock that predates this instance. */
+    if (document.documentElement.classList.contains("overflow-hidden")) {
+      lenis.stop();
+    }
+
     document.fonts.ready
       .then(() => ScrollTrigger.refresh())
       .catch(() => undefined);

@@ -11,19 +11,15 @@ import {
   type ReactNode,
 } from "react";
 import { gsap } from "@/lib/gsap";
-import {
-  AUDIO_FADE_S,
-  AUDIO_PREF_KEY,
-  AUDIO_TARGET_VOLUME,
-} from "@/lib/constants";
+import { AUDIO_FADE_S, AUDIO_TARGET_VOLUME } from "@/lib/constants";
 import { SITE } from "@/content/site";
 import type { AudioTrack } from "@/content/types";
 
 /*
  * One hidden <audio preload="none"> for the whole site. Playback starts only
  * from a user gesture (iOS policy); play/pause fade via a GSAP volume tween;
- * tracks auto-advance cyclically. The stored preference only styles the
- * toggle on revisit, it never autoplays.
+ * tracks auto-advance cyclically. Nothing is persisted: sound is an explicit
+ * per-visit choice and never autoplays.
  */
 interface AudioContextValue {
   readonly isPlaying: boolean;
@@ -73,16 +69,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   }, [fadeTo]);
 
   const toggle = useCallback(() => {
-    const next = !isPlaying;
-    try {
-      localStorage.setItem(AUDIO_PREF_KEY, next ? "on" : "off");
-    } catch {
-      /* storage unavailable (private mode); preference simply not saved */
-    }
-    if (next) {
-      play();
-    } else {
+    if (isPlaying) {
       pause();
+    } else {
+      play();
     }
   }, [isPlaying, play, pause]);
 

@@ -125,6 +125,9 @@ export function DeskSection({ data }: DeskSectionProps) {
       <div
         ref={pinRef}
         data-cursor="drag"
+        tabIndex={0}
+        role="region"
+        aria-label="The Desk case studies, horizontally scrollable"
         className={cn(
           "relative",
           "group-data-[tier=full]/desk:h-screen group-data-[tier=full]/desk:overflow-hidden",

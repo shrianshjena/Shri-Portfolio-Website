@@ -85,12 +85,19 @@ export function Preloader() {
       return;
     }
 
-    const proxy = { value: 0 };
+    /* The displayed value is the monotonic max of two sources: a time-based
+     * drift (so the counter always moves) and real tracked asset progress
+     * (so the number means something). Each source tweens its own proxy;
+     * commit() renders whichever is ahead and never goes backward. */
+    const shown = { value: 0 };
+    const driftProxy = { value: 0 };
+    const realProxy = { value: 0 };
     let lastAnnounced = -1;
+
     const render = (): void => {
-      const rounded = Math.round(proxy.value);
+      const rounded = Math.round(shown.value);
       counter.textContent = String(rounded).padStart(3, "0");
-      gsap.set(bar, { scaleX: proxy.value / 100 });
+      gsap.set(bar, { scaleX: shown.value / 100 });
       const step = Math.floor(rounded / ANNOUNCE_STEP) * ANNOUNCE_STEP;
       if (step !== lastAnnounced && announceRef.current) {
         lastAnnounced = step;
@@ -98,11 +105,17 @@ export function Preloader() {
       }
     };
 
-    const drift = gsap.to(proxy, {
+    const commit = (candidate: number): void => {
+      if (candidate <= shown.value) return;
+      shown.value = candidate;
+      render();
+    };
+
+    const drift = gsap.to(driftProxy, {
       value: DRIFT_TARGET,
       duration: PRELOADER_MIN_MS / 1000,
       ease: "power2.out",
-      onUpdate: render,
+      onUpdate: () => commit(driftProxy.value),
     });
 
     const tracker = createLoadingTracker(
@@ -113,6 +126,16 @@ export function Preloader() {
       ],
       PRELOADER_TASK_TIMEOUT_MS,
     );
+
+    const unsubscribe = tracker.onProgress((progress) => {
+      gsap.to(realProxy, {
+        value: Math.min(progress, 99),
+        duration: 0.45,
+        ease: "power1.out",
+        overwrite: "auto",
+        onUpdate: () => commit(realProxy.value),
+      });
+    });
 
     const exit = (): void => {
       try {
@@ -134,8 +157,10 @@ export function Preloader() {
     };
 
     const finish = (): void => {
+      unsubscribe();
       drift.kill();
-      gsap.to(proxy, {
+      gsap.killTweensOf(realProxy);
+      gsap.to(shown, {
         value: 100,
         duration: 0.35,
         ease: "power1.in",
@@ -159,10 +184,16 @@ export function Preloader() {
   return (
     <div
       ref={overlayRef}
+      data-preloader
       role="status"
       className="fixed inset-0 z-[90] flex flex-col justify-between bg-canvas px-6 py-8 md:px-12 md:py-10"
       style={{ clipPath: "inset(0 0 0% 0)" }}
     >
+      {/* Without JavaScript the exit choreography never runs; hide the gate
+       * entirely so the server-rendered page stays readable. */}
+      <noscript>
+        <style>{`[data-preloader]{display:none}`}</style>
+      </noscript>
       <p className="eyebrow">SYS BOOT · LOADING 000-100</p>
 
       <div className="flex items-end justify-between gap-8">

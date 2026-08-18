@@ -142,8 +142,23 @@ export function ProductionSection({ data }: ProductionSectionProps) {
       <div ref={scopeRef}>
         {/* GRID: the accessible platform list. Visually hidden, never
             unmounted, while the decorative helix is on stage. */}
-        <div className={cn(isHelix ? "sr-only" : "mt-16 md:mt-24")}>
-          <ul className="grid gap-px bg-line sm:grid-cols-2">
+        <div
+          className={cn(
+            isHelix
+              ? cn(
+                  "sr-only",
+                  "focus-within:not-sr-only focus-within:fixed",
+                  "focus-within:bottom-6 focus-within:left-6 focus-within:z-[75]",
+                  "focus-within:block focus-within:max-h-[60vh]",
+                  "focus-within:w-[min(420px,90vw)] focus-within:overflow-y-auto",
+                  "focus-within:border focus-within:border-line-strong",
+                  "focus-within:bg-ink focus-within:p-6",
+                )
+              : "mt-16 md:mt-24",
+            "group/platgrid",
+          )}
+        >
+          <ul className="grid gap-px bg-line sm:grid-cols-2 group-focus-within/platgrid:grid-cols-1">
             {data.platforms.map((platform) => (
               <li key={platform.title} data-cell className="bg-canvas p-8">
                 <PlatformCard platform={platform} />

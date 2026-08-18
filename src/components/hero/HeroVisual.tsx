@@ -34,31 +34,46 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
   useEffect(() => {
     const memory =
       (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
-    setTierOk(
-      window.matchMedia(MEDIA.full).matches && memory >= MIN_DEVICE_MEMORY_GB,
-    );
+    const query = window.matchMedia(MEDIA.full);
+    const updateTier = (): void => {
+      setTierOk(query.matches && memory >= MIN_DEVICE_MEMORY_GB);
+    };
+    updateTier();
+    query.addEventListener("change", updateTier);
 
     const host = hostRef.current;
-    if (!host) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setInView(true);
         observer.disconnect();
       }
     });
-    observer.observe(host);
-    return () => observer.disconnect();
+    if (host) observer.observe(host);
+    return () => {
+      query.removeEventListener("change", updateTier);
+      observer.disconnect();
+    };
   }, []);
 
   const mountSpline = tierOk && inView && status === "done";
 
+  /* If the tier drops (viewport narrows, reduced motion toggles on), the
+   * Spline island unmounts; bring the poster back. */
+  useEffect(() => {
+    if (!mountSpline) setSplineReady(false);
+  }, [mountSpline]);
+
   return (
     <div ref={hostRef} className="relative h-full w-full">
+      {/* unoptimized: the poster is already a hand-tuned 21KB webp, and the
+       * preloader decodes this exact URL, so the optimizer would only make
+       * the page fetch the bytes twice under two different URLs. */}
       <Image
         src={HERO_POSTER_SRC}
         alt={posterAlt}
         fill
         priority
+        unoptimized
         fetchPriority="high"
         sizes="(max-width: 1023px) 100vw, 45vw"
         onError={() => setPosterFailed(true)}

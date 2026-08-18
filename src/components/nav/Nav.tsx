@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SITE } from "@/content/site";
 import { AudioToggle } from "./AudioToggle";
 import { MagneticButton } from "@/components/fx/MagneticButton";
@@ -8,11 +8,52 @@ import { MagneticButton } from "@/components/fx/MagneticButton";
 /*
  * Fixed 56px bar: mono ident left, chapter anchors + audio module right.
  * Raw navy with a hairline border, no blur, no glass. Mobile gets a
- * full-screen overlay index at display scale.
+ * full-screen overlay index with real dialog semantics: focus moves in,
+ * Tab is trapped, Escape closes, scroll is locked, and focus returns to
+ * the MENU button on close.
  */
 export function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { ident, anchors } = SITE.nav;
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const dialog = dialogRef.current;
+    closeButtonRef.current?.focus();
+    document.documentElement.classList.add("overflow-hidden");
+
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) return;
+      const focusables = dialog.querySelectorAll<HTMLElement>(
+        "a[href], button:not([disabled])",
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.documentElement.classList.remove("overflow-hidden");
+      menuButtonRef.current?.focus();
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -42,6 +83,7 @@ export function Nav() {
           <AudioToggle showTitle />
 
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-expanded={menuOpen}
@@ -56,6 +98,7 @@ export function Nav() {
 
       {menuOpen ? (
         <div
+          ref={dialogRef}
           id="mobile-menu"
           role="dialog"
           aria-modal="true"
@@ -65,6 +108,7 @@ export function Nav() {
           <div className="flex items-center justify-between">
             <span className="eyebrow !text-[11px]">{ident}</span>
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={() => setMenuOpen(false)}
               className="eyebrow !text-[11px] text-fg"

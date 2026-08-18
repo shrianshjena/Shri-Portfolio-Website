@@ -17,7 +17,6 @@ export const SPLINE_IDLE_VISIBILITY = 0.05;
 /* Audio. */
 export const AUDIO_TARGET_VOLUME = 0.55;
 export const AUDIO_FADE_S = 0.8;
-export const AUDIO_PREF_KEY = "sj:audio";
 
 /* Ticker marquee. */
 export const TICKER_LOOP_S = 28;
