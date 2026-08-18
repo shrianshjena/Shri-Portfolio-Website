@@ -7,10 +7,13 @@ import { MagneticButton } from "@/components/fx/MagneticButton";
 
 /*
  * Contact form: underline fields, a hidden honeypot, and the site's single
- * pill CTA. Validates with the shared zod schema before POSTing to
- * /api/contact. Success replaces the form; errors offer a direct mailto
- * fallback. The status region is a persistent aria-live container so state
- * changes are announced.
+ * pill CTA. Validates with the shared zod schema, then POSTs straight to
+ * Web3Forms from the browser: their free tier only accepts client-side
+ * submissions, and the access key is a public form identifier (it can only
+ * route mail to the owner's own inbox), not a secret. A filled honeypot
+ * short-circuits locally without any network request. Success replaces the
+ * form; errors offer a direct mailto fallback. The status region is a
+ * persistent aria-live container so state changes are announced.
  */
 
 interface ContactFormProps {
@@ -19,7 +22,10 @@ interface ContactFormProps {
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-const CONTACT_ENDPOINT = "/api/contact";
+const CONTACT_ENDPOINT = "https://api.web3forms.com/submit";
+const ACCESS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_KEY ??
+  "03801fe0-3a26-45af-9472-d1035dad4c4a";
 const MESSAGE_ROWS = 5;
 const INPUT_CLASSES =
   "w-full border-0 border-b border-line bg-transparent py-3 text-base text-fg focus:border-steel focus:outline-none";
@@ -41,8 +47,12 @@ export function ContactForm({ data }: ContactFormProps) {
       message: String(formData.get("message") ?? ""),
     };
 
-    /* Client-side gate with the shared schema. The honeypot is a server-side
-     * concern, so it is validated here as the human default. */
+    /* A filled honeypot means a bot: report success, send nothing. */
+    if (website !== "") {
+      setStatus("success");
+      return;
+    }
+
     const parsed = contactSchema.safeParse({ ...candidate, website: "" });
     if (!parsed.success) {
       setStatus("error");
@@ -53,12 +63,15 @@ export function ContactForm({ data }: ContactFormProps) {
     try {
       const response = await fetch(CONTACT_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
+          access_key: ACCESS_KEY,
+          subject: `Portfolio contact from ${parsed.data.name}`,
+          from_name: parsed.data.name,
           name: parsed.data.name,
           email: parsed.data.email,
           message: parsed.data.message,
-          website,
+          botcheck: "",
         }),
       });
       const result: unknown = await response.json();
@@ -66,7 +79,7 @@ export function ContactForm({ data }: ContactFormProps) {
         response.ok &&
         typeof result === "object" &&
         result !== null &&
-        (result as { readonly ok?: unknown }).ok === true;
+        (result as { readonly success?: unknown }).success === true;
       setStatus(isOk ? "success" : "error");
     } catch {
       setStatus("error");

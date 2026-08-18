@@ -38,12 +38,15 @@
     ".next-dist/types/**/*.ts",
     ".next-dist/dev/types/**/*.ts",
     ".build/types/**/*.ts",
-    ".build/dev/types/**/*.ts"
+    ".build/dev/types/**/*.ts",
+    ".dist/types/**/*.ts",
+    ".dist/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     ".next",
     ".next-dist",
-    ".build"
+    ".build",
+    ".dist"
   ]
 }

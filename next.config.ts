@@ -10,7 +10,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob:",
   "font-src 'self'",
   "media-src 'self'",
-  "connect-src 'self' https://prod.spline.design https://unpkg.com",
+  "connect-src 'self' https://prod.spline.design https://unpkg.com https://api.web3forms.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
@@ -36,10 +36,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  /* Default .next is held open by another IDE process on this machine;
-   * exFAT offers no way to reclaim it without closing that app. The dist dir
-   * is also excluded in tsconfig so editor language servers never lock it. */
-  distDir: ".build",
+  /* Editor file-watcher handles on exFAT block re-creating a previously
+   * used dist directory; .vscode/settings.json excludes dist folders from
+   * watching and tsconfig excludes them from language servers so this name
+   * stays writable. */
+  distDir: ".dist",
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
   compiler: {

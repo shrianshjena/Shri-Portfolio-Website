@@ -37,11 +37,5 @@ export const CURSOR_RING_LERP_S = 0.4;
 /* Scroll-rotation dial (The Loop). */
 export const DIAL_MAX_ROTATION_DEG = 360;
 
-/* Contact API rate limit: 5 requests / 10 minutes per IP. */
-export const RATE_LIMIT = {
-  max: 5,
-  windowMs: 600_000,
-} as const;
-
 /* Canonical site URL (overridden by NEXT_PUBLIC_SITE_URL). */
 export const FALLBACK_SITE_URL = "https://shrianshjena.vercel.app";
