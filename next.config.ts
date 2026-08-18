@@ -36,11 +36,13 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  /* Editor file-watcher handles on exFAT block re-creating a previously
-   * used dist directory; .vscode/settings.json excludes dist folders from
-   * watching and tsconfig excludes them from language servers so this name
-   * stays writable. */
-  distDir: ".dist",
+  /* Local Windows dev: editor file-watcher handles on exFAT block
+   * re-creating a previously used dist directory, so local builds use
+   * .dist (excluded from watching in .vscode/settings.json and from
+   * language servers in tsconfig). Vercel builds in a clean container and
+   * its output collection expects the standard .next directory, so the
+   * workaround must not apply there. */
+  distDir: process.env.VERCEL ? ".next" : ".dist",
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
   compiler: {
