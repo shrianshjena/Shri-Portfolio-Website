@@ -3,6 +3,38 @@
 Running log of decisions and state that the code alone does not explain.
 Newest first.
 
+## 2026-08-19 · v1.2.0 shipped (review round 2, budget-lean)
+
+- **Root cause of the desktop premature-trigger bug**: GSAP refreshes
+  triggers in creation order; document-order sorting only activates when
+  some trigger sets refreshPriority. The helix pin mounts post-paint, so
+  Stack/Foundations/Contact starts were measured with its 250% spacer
+  reverted (~2.5 viewports early) and the dial park window landed inside
+  the helix (spin paused at rest on the dial). Fixed with refreshPriority
+  on the pin + explicit sort/refresh + onRefresh resync on the park
+  trigger. Probe-verified: tiles at opacity 0.4 from page top, dial
+  advancing at rest. Gotcha recorded in CLAUDE.md.
+- **Ticker**: velocity coupling deleted (per-scroll-frame timeScale tween
+  was the lag), constant 48s loop, force3D + will-change.
+- **Identity**: "NIFTY options trader" broadened to "options trader" in
+  identity lines only (user decision); NIFTY 50 stays in the backtest
+  panel and ticker instruments as system facts.
+- **Spline on mobile**: mount gate widened to full OR lite (deviceMemory
+  >= 4, never reduce) at the user's request; HOLD ships there too. Mobile
+  music CTA moved in flow below the visual.
+- **Imagery**: Position portrait = rain-at-rail Pluto frame; SOLAS row =
+  cropped solasmodu.net screenshot (optimizer gained a crop step; capture
+  was 125% Windows scaling, final trim top 140/bottom 60); band = lifeboat
+  deployment; WoodsMan = 3:4 BI-dashboard crop. ABS → GAIL in SOLAS line.
+- **Budget note**: implemented inline, no workflows/E2E per user
+  constraint (27% weekly usage left); verification limited to a single
+  targeted puppeteer probe. User verifies the live site themselves.
+- **Rig learnings**: gsap ships ambient ScrollTrigger types, so a missing
+  value import compiles and only fails at runtime; puppeteer setViewport
+  with isMobile on a live page forces a reload (use a fresh page with the
+  viewport set before goto); SwiftShader wasm compile blocks the main
+  thread long enough to stall GSAP intros in probes.
+
 ## 2026-08-19 · v1.1.0 shipped (commit f1db97f, live on Vercel)
 
 - **What shipped**: user-review round per the v1.1 brief. SJ favicon/app

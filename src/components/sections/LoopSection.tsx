@@ -163,18 +163,24 @@ export function LoopSection({ data }: LoopSectionProps) {
 
           /* Park the spin while the section is fully offscreen; a live
            * HOLD wins over re-entry (the hold effect resumes on RUN). */
+          const syncPark = (self: ScrollTrigger): void => {
+            parkedRef.current = !self.isActive;
+            if (self.isActive && !holdRef.current) {
+              spin.play();
+            } else {
+              spin.pause();
+            }
+          };
           ScrollTrigger.create({
             trigger: scope,
             start: DIAL_PARK_START,
             end: DIAL_PARK_END,
-            onToggle: (self) => {
-              parkedRef.current = !self.isActive;
-              if (self.isActive && !holdRef.current) {
-                spin.play();
-              } else {
-                spin.pause();
-              }
-            },
+            onToggle: syncPark,
+            /* onToggle alone misses refreshes that correct this trigger's
+             * geometry without flipping isActive (e.g. the helix pin's
+             * post-mount sort+refresh); resync on every refresh so the
+             * spin never stays paused on a visible dial. */
+            onRefresh: syncPark,
           });
         }
 

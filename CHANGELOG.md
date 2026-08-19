@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.2.0 — 2026-08-19
+
+Review round 2: broader trading identity, the desktop trigger-timing root
+cause, a calmer ticker, the robot on mobile, and an imagery pass.
+
+### Fixed
+
+- Desktop scroll-trigger timing below chapter 05: GSAP refreshes triggers
+  in creation order and only document-sorts when some trigger declares
+  refreshPriority. The helix pin mounts after first paint (grid-to-helix
+  swap), so every refresh measured Stack/Foundations/Contact with its 250%
+  pin spacer reverted and their once-triggers fired ~2.5 viewports early;
+  the dial's park window landed inside the helix, pausing the spin whenever
+  scrolling rested on the real dial. Fix: refreshPriority on the helix pin
+  (turns the global sort on) plus an explicit sort+refresh after the pin
+  mounts, and an onRefresh resync on the dial park trigger.
+- Ticker marquee: scroll-velocity coupling removed entirely (it allocated a
+  timeScale tween on nearly every scroll frame, the lag source). The tape
+  is now a constant-speed, fully auto-driven loop, slowed 28s to 48s per
+  cycle, GPU-promoted (force3D + will-change). Hover-pause and HOLD stay.
+
+### Changed
+
+- Identity wording broadened from "NIFTY options trader" to options trader
+  in the hero subtitle, meta/share description, keywords, the Position
+  opener and the RESEARCH detent. The backtest-engine panel and the ticker
+  instruments entry keep NIFTY 50 as system facts (owner decision).
+- Spline robot now mounts on the lite tier too (phones and small screens,
+  deviceMemory >= 4, never reduced-motion), with the HOLD control along;
+  the mobile hero was a static poster before.
+- Hero music CTA sits in flow below the visual on mobile (no robot
+  overlap); the md+ three-zone bottom bar is unchanged.
+- Imagery: Position portrait is now the rain-at-the-vessel-rail frame; the
+  SOLAS MODU entry shows a cropped solasmodu.net screenshot instead of the
+  portrait; the photo band is the SOLAS MODU freefall-lifeboat deployment;
+  WoodsMan gains a 3:4 BI-dashboard image. The optimizer script gained an
+  optional crop step for the screenshot trim.
+- SOLAS MODU line: GAIL (Gas Authority of India Limited) replaces the
+  American Bureau of Shipping.
+
 ## 1.1.0 — 2026-08-19
 
 User-review round: identity assets and share cards, the previous site's

@@ -99,10 +99,12 @@ export function HeroSection({ data }: { readonly data: HeroContent }) {
         </div>
       </div>
 
-      {/* Three-zone bottom bar: empty left balance, the music CTA dead
-       * center (Lovable-style), the scroll cue on the right. */}
-      <div className="pointer-events-none absolute inset-x-6 bottom-6 grid grid-cols-3 items-end md:inset-x-12 lg:inset-x-20">
-        <span aria-hidden="true" />
+      {/* Three-zone bottom bar on md+: empty left balance, the music CTA
+       * dead center (Lovable-style), the scroll cue on the right. On
+       * mobile the bar sits in flow below the visual so the CTA never
+       * overlaps the robot. */}
+      <div className="pointer-events-none relative mt-8 grid grid-cols-1 justify-items-center md:absolute md:inset-x-12 md:bottom-6 md:mt-0 md:grid-cols-3 md:items-end lg:inset-x-20">
+        <span aria-hidden="true" className="hidden md:block" />
         <div className="hero-rise pointer-events-auto justify-self-center">
           <HeroAudioCta label={data.audioHint} />
         </div>

@@ -1,7 +1,7 @@
 # EDGE IS ENGINEERED — Shriansh Jena
 
 Single-page portfolio repositioning Shriansh Jena around capital markets, fintech and
-AI-augmented engineering: NIFTY 50 options trader building the research, backtesting
+AI-augmented engineering: options trader building the research, backtesting
 and alerting systems behind the trades.
 
 Live (after deploy): https://shrianshjena.vercel.app · Replaces: https://shrianshjena.lovable.app

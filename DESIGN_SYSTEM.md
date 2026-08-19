@@ -54,7 +54,7 @@ Three tiers, implemented in every animated component via `gsap.matchMedia`:
 | Tier | Query (`src/lib/motion.ts`) | Behavior |
 |---|---|---|
 | `full` | ≥1024px, fine pointer, no reduced-motion | Pins, scrubs, scrambles, Spline |
-| `lite` | touch or <1024px, no reduced-motion | Fades and rises only; horizontal chapters become native swipe strips; helix becomes a grid |
+| `lite` | touch or <1024px, no reduced-motion | Fades and rises only; horizontal chapters become native swipe strips; helix becomes a grid. Exception: the Spline hero DOES mount here (deviceMemory >= 4) so the robot animates on phones |
 | `reduce` | `prefers-reduced-motion` | Final states set instantly; native scroll; Spline never mounts; poster only |
 
 Autonomous motion carries its own mechanism: anything moving longer than 5
@@ -81,17 +81,18 @@ Signature set-pieces, each used exactly once:
 - **RailHeader**: instrument column/band header. A ring dot that fills on
   entry, a decoded mono label, and a hairline running to the container edge
   with a terminal tick. Loop skill groups, Stack bands, Foundations columns.
-- **Ticker** (between 01 and 02): the site's only marquee; scroll-velocity
-  coupled on desktop, plain autoplay on touch, static and swipeable under
-  reduced motion; visible HOLD/RUN pause control (WCAG 2.2.2).
+- **Ticker** (between 01 and 02): the site's only marquee; a constant-speed,
+  fully auto-driven 48s loop (scroll never touches it), hover-pause on
+  desktop, static and swipeable under reduced motion; visible HOLD/RUN
+  pause control (WCAG 2.2.2).
 - **Horizontal pinned chapter** (03 THE DESK): vertical scroll drives lateral
   panel traversal while the backtest equity curve draws (DrawSVG) across the
   full track in the same scrubbed timeline; scroll position is the backtest
   timeline.
-- **Photo band** (04): an offshore jack-up-rig frame as a 45vh duotone band,
-  8 percent parallax, environmental crop, mono caption. Deliberately not a
-  portrait; the 3:4 vessel-rail portrait lives inside the SOLAS MODU ledger
-  row instead.
+- **Photo band** (04): the SOLAS MODU freefall-lifeboat deployment frame as
+  a 45vh duotone band, 8 percent parallax, environmental crop, mono
+  caption. Deliberately not a portrait; the rain-at-the-rail portrait now
+  opens THE POSITION and the SOLAS ledger row shows the solasmodu.net site.
 - **Spiral helix** (05): four live platforms on a rotating 3D ring (pinned,
   scrubbed 360 degrees, cosine opacity falloff). The accessible grid variant
   stays in the DOM; keyboard focus reveals it as a visible panel.

@@ -34,12 +34,20 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
   useEffect(() => {
     const memory =
       (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
-    const query = window.matchMedia(MEDIA.full);
+    /* The scene mounts on full AND lite tiers (the robot animates on
+     * mobile too, per owner request); MEDIA.lite already excludes reduced
+     * motion, and the memory floor keeps low-end devices on the poster. */
+    const fullQuery = window.matchMedia(MEDIA.full);
+    const liteQuery = window.matchMedia(MEDIA.lite);
     const updateTier = (): void => {
-      setTierOk(query.matches && memory >= MIN_DEVICE_MEMORY_GB);
+      setTierOk(
+        (fullQuery.matches || liteQuery.matches) &&
+          memory >= MIN_DEVICE_MEMORY_GB,
+      );
     };
     updateTier();
-    query.addEventListener("change", updateTier);
+    fullQuery.addEventListener("change", updateTier);
+    liteQuery.addEventListener("change", updateTier);
 
     const host = hostRef.current;
     const observer = new IntersectionObserver(([entry]) => {
@@ -50,7 +58,8 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
     });
     if (host) observer.observe(host);
     return () => {
-      query.removeEventListener("change", updateTier);
+      fullQuery.removeEventListener("change", updateTier);
+      liteQuery.removeEventListener("change", updateTier);
       observer.disconnect();
     };
   }, []);

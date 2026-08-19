@@ -1,24 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap, useGSAP, ScrollTrigger } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { MEDIA } from "@/lib/motion";
-import {
-  TICKER_LOOP_S,
-  TICKER_MAX_SPEED,
-  TICKER_VELOCITY_DIVISOR,
-} from "@/lib/constants";
+import { TICKER_LOOP_S } from "@/lib/constants";
 import type { TickerContent, TickerItem, TickerTone } from "@/content/types";
 import { cn } from "@/lib/cn";
 
 /*
  * The site's only marquee: a financial-tape strip of verified static
- * figures. Desktop: loop speed is modulated by scroll velocity (fast
- * scrolling whips the tape, easing back to a slow drift). Touch: plain
- * autoplay. Reduced motion: static strip, horizontally swipeable.
- * A visible HOLD/RUN control satisfies WCAG 2.2.2 (pause for moving
- * content); hover-pause and the pause control both win over the
- * scroll-velocity coupling.
+ * figures on a constant-speed, fully auto-driven loop (scroll never
+ * touches it). Desktop adds hover-pause; touch is plain autoplay; reduced
+ * motion gets a static, horizontally swipeable strip. A visible HOLD/RUN
+ * control satisfies WCAG 2.2.2 (pause for moving content).
  */
 const TONE_CLASS: Record<TickerTone, string> = {
   default: "text-muted",
@@ -87,6 +81,7 @@ export function TickerMarquee({ data }: { readonly data: TickerContent }) {
           ease: "none",
           duration: TICKER_LOOP_S,
           repeat: -1,
+          force3D: true,
         });
         loopRef.current = loop;
         return loop;
@@ -96,35 +91,11 @@ export function TickerMarquee({ data }: { readonly data: TickerContent }) {
 
       mm.add(MEDIA.full, () => {
         const loop = buildLoop();
-        let hovered = false;
-
-        const trigger = ScrollTrigger.create({
-          onUpdate: (self) => {
-            if (hovered || holdRef.current) return;
-            const velocity = gsap.utils.clamp(
-              -TICKER_MAX_SPEED,
-              TICKER_MAX_SPEED,
-              self.getVelocity() / TICKER_VELOCITY_DIVISOR,
-            );
-            if (Math.abs(velocity) <= 1) return;
-            gsap.to(loop, {
-              timeScale: velocity,
-              duration: 0.3,
-              overwrite: "auto",
-              onComplete: () => {
-                if (hovered || holdRef.current) return;
-                gsap.to(loop, { timeScale: 1, duration: 1.2, ease: "power2.out" });
-              },
-            });
-          },
-        });
 
         const pause = (): void => {
-          hovered = true;
           gsap.to(loop, { timeScale: 0, duration: 0.4, overwrite: "auto" });
         };
         const resume = (): void => {
-          hovered = false;
           if (holdRef.current) return;
           gsap.to(loop, { timeScale: 1, duration: 0.6, overwrite: "auto" });
         };
@@ -134,7 +105,6 @@ export function TickerMarquee({ data }: { readonly data: TickerContent }) {
         return () => {
           root.removeEventListener("pointerenter", pause);
           root.removeEventListener("pointerleave", resume);
-          trigger.kill();
           loop.kill();
           loopRef.current = null;
         };
@@ -160,7 +130,7 @@ export function TickerMarquee({ data }: { readonly data: TickerContent }) {
         tabIndex={0}
         className="overflow-hidden motion-reduce:overflow-x-auto motion-reduce:no-scrollbar"
       >
-        <div ref={trackRef} className="flex w-max">
+        <div ref={trackRef} className="flex w-max will-change-transform">
           <TickerRow items={data.items} />
           <TickerRow items={data.items} hidden />
         </div>

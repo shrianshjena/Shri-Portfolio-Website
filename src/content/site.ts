@@ -17,7 +17,7 @@ export const SITE: SiteContent = {
     keywords: [
       "Shriansh Jena",
       "derivatives trader",
-      "NIFTY options",
+      "index options",
       "options backtesting",
       "capital markets",
       "fintech",
@@ -43,7 +43,7 @@ export const SITE: SiteContent = {
   hero: {
     eyebrow: "01 · SHRIANSH JENA · MUMBAI, IN",
     headlineLines: ["EDGE IS", "ENGINEERED"],
-    sub: "NIFTY options trader building the research, backtesting and alerting systems behind the trades.",
+    sub: "Options trader building the research, backtesting and alerting systems behind the trades.",
     ctas: [
       { label: "VIEW THE DESK", href: "#desk" },
       { label: "DOWNLOAD RESUME", href: "/docs/Shriansh_Jena_Resume.pdf", external: true },
@@ -87,14 +87,14 @@ export const SITE: SiteContent = {
     anchor: "position",
     lead: "Trader first. Engineer because the edge demanded it.",
     paragraphs: [
-      "I trade NIFTY 50 index options. Defined-risk selling, iron condors, short straddles, trend-filtered entries. I reached consistent profitability inside my first year, and I got there by refusing to run any idea I could not test.",
+      "I trade index options. Defined-risk selling, iron condors, short straddles, trend-filtered entries. I reached consistent profitability inside my first year, and I got there by refusing to run any idea I could not test.",
       "So I built the test bench. A Python backtesting engine with a full India cost model, STT, brokerage, slippage, stamp duty, fed by Dhan and ICICI Breeze APIs. My multifactor EMA options-selling strategy holds a 27.24% CAGR across a two year, four month backtest.",
       "At Deepsea Finvest, a private wealth management desk, that discipline became infrastructure. A bond monitor that screens NSE and Bondbazaar and pushes secured AAA and AA alerts inside ten seconds. A master model turning 200+ ISINs into client deliverables. A catch that kept the desk inside SEBI's algo rules.",
       "I ship through AI-augmented workflows, Claude Code, MCP, agent systems, and I own the architecture and the review. The market keeps score. I like that.",
     ],
     image: {
       src: "/images/position-portrait.webp",
-      alt: "Shriansh Jena, evening portrait in a linen shirt",
+      alt: "Shriansh Jena in offshore gear at a vessel rail in the rain",
     },
   },
 
@@ -201,7 +201,7 @@ export const SITE: SiteContent = {
         company: "SOLAS MODU",
         role: "ASSOCIATE ANALYST · BUSINESS & OPERATIONS",
         period: "JUN 2024 · MAR 2026",
-        line: "Marine and offshore consultancy serving ONGC, the American Bureau of Shipping (ABS), Indian Oil and Mazagon Dock.",
+        line: "Marine and offshore consultancy serving ONGC, GAIL (Gas Authority of India Limited), Indian Oil and Mazagon Dock.",
         bullets: [
           "Led the full redesign and rebuild of the corporate website, giving each of 6 service divisions a dedicated page.",
           "Structured a decade of offshore history into an operations log covering 11+ campaigns for ONGC, IOCL and Jagson, 2013 through contracts running to 2029.",
@@ -213,8 +213,8 @@ export const SITE: SiteContent = {
           { label: "SOLASMODU.IN", href: "https://solasmodu.in", external: true },
         ],
         image: {
-          src: "/images/record/solas-portrait.webp",
-          alt: "Shriansh Jena at the rail of a vessel during an offshore campaign",
+          src: "/images/record/solas-site.webp",
+          alt: "solasmodu.net corporate site hero, a lifeboat passing a jack-up rig",
         },
       },
       {
@@ -223,12 +223,16 @@ export const SITE: SiteContent = {
         period: "MAR 2024 · MAY 2024",
         line: "Revenue, subscription and product reporting across 2 departments; customer segmentation for targeted marketing.",
         bullets: [],
+        image: {
+          src: "/images/record/woodsman-portrait.webp",
+          alt: "Dual-monitor revenue and subscription dashboards at the WoodsMan desk",
+        },
       },
     ],
     photoBand: {
       src: "/images/field-record.webp",
-      alt: "Jack-up rig standing at open sea during an offshore campaign, India",
-      caption: "FIELD RECORD · MODU CAMPAIGN · OFFSHORE INDIA",
+      alt: "SOLAS MODU freefall lifeboat cradled in its davit over open sea",
+      caption: "FIELD RECORD · LIFEBOAT DEPLOYMENT · OFFSHORE INDIA",
     },
   },
 
@@ -314,7 +318,7 @@ export const SITE: SiteContent = {
       {
         label: "RESEARCH",
         description:
-          "Markets first. NIFTY 50 options structures, NSE and Bondbazaar listings, filings and flows, cut down to the questions a desk actually asks.",
+          "Markets first. Index options structures, NSE and Bondbazaar listings, filings and flows, cut down to the questions a desk actually asks.",
       },
       {
         label: "BUILD",

@@ -55,7 +55,7 @@ export function HeroAudioCta({ label }: HeroAudioCtaProps) {
     <div ref={scope} className="flex flex-col items-center gap-3">
       <AudioToggle layout="stack" showTitle={isPlaying} />
       {!isPlaying ? (
-        <p className="hero-audio-hint eyebrow !text-[10px] text-muted">
+        <p className="hero-audio-hint eyebrow !text-[10px] whitespace-nowrap text-muted">
           {label}
         </p>
       ) : null}

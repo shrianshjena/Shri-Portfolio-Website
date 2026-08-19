@@ -10,14 +10,24 @@ const BUDGET_BYTES = 250 * 1024;
 
 const SOURCES = [
   {
-    src: "C:/Users/Admin/Shriansh Pictures/Shri_Vessel Pluto 2.png",
-    dest: "public/images/record/solas-portrait.webp",
+    src: "C:/Users/Admin/Downloads/SOLAS MODU Website Screenshot.png",
+    /* Full-desktop capture: trim the browser chrome and the taskbar so
+     * only the page viewport ships. */
+    crop: { left: 0, top: 140, width: 1920, height: 880 },
+    dest: "public/images/record/solas-site.webp",
+    width: 1000,
+    height: 625,
+    quality: 78,
+  },
+  {
+    src: "C:/Users/Admin/Personal Portfolio Website/WoodsMan 1.png",
+    dest: "public/images/record/woodsman-portrait.webp",
     width: 800,
     height: 1067,
     quality: 78,
   },
   {
-    src: "C:/Users/Admin/SOLAS MODU/SOLAS MODU_CARLTSOLAS_Website Images/Jack-Up Rig.png",
+    src: "C:/Users/Admin/SOLAS MODU/SOLAS MODU Lifeboat Deployment.png",
     dest: "public/images/field-record.webp",
     width: 1600,
     quality: 78,
@@ -35,7 +45,7 @@ const SOURCES = [
     quality: 78,
   },
   {
-    src: "C:/Users/Admin/Shriansh Pictures/SJ Profile Pic 2.jpg",
+    src: "C:/Users/Admin/Shriansh Pictures/Shri_Vessel Pluto.png",
     dest: "public/images/position-portrait.webp",
     width: 800,
     height: 1067,
@@ -54,6 +64,7 @@ for (const item of SOURCES) {
   const out = path.join(ROOT, item.dest);
   await mkdir(path.dirname(out), { recursive: true });
   let pipeline = sharp(item.src).rotate();
+  if (item.crop) pipeline = pipeline.extract(item.crop);
   pipeline = item.height
     ? pipeline.resize(item.width, item.height, { fit: "cover", position: "centre" })
     : pipeline.resize({ width: item.width });

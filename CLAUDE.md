@@ -13,7 +13,9 @@ Fully static: one route, no API endpoints.
    scroll or RAF system.
 2. **Every animated component implements three tiers** with `gsap.matchMedia`
    and `MEDIA.full/lite/reduce` from `@/lib/motion`. reduce = final states
-   visible, no pins, native scroll, no Spline.
+   visible, no pins, native scroll, no Spline. One deliberate exception:
+   the Spline hero mounts on full AND lite (robot animates on phones,
+   deviceMemory >= 4), never on reduce.
 3. **One engine per property**: scroll scrubs animate wrapper elements,
    pointer effects animate inner elements, CSS transitions never touch a
    GSAP-driven property.
@@ -55,6 +57,11 @@ Fully static: one route, no API endpoints.
 - `next dev` file-watching on this volume can serve stale modules after
   edits; if the browser shows old code with the disk correct, restart the
   dev server.
+- GSAP refreshes ScrollTriggers in CREATION order and only document-sorts
+  when some trigger declares `refreshPriority`. Any pin created after first
+  paint (the helix mounts via a state swap) must set `refreshPriority` and
+  dispatch `ScrollTrigger.sort(); ScrollTrigger.refresh();`, or every
+  trigger below it measures against pre-pin layout and fires early.
 - Headless Chrome here needs `--disable-gpu` (see
   `~/.claude/scripts/ab-chrome.sh`); WebGL then fails, so the Spline scene
   only renders with `--enable-unsafe-swiftshader --use-angle=swiftshader`.

@@ -25,10 +25,8 @@ export const SPLINE_IDLE_VISIBILITY = 0.05;
 export const AUDIO_TARGET_VOLUME = 0.55;
 export const AUDIO_FADE_S = 0.8;
 
-/* Ticker marquee. */
-export const TICKER_LOOP_S = 28;
-export const TICKER_MAX_SPEED = 6;
-export const TICKER_VELOCITY_DIVISOR = 250;
+/* Ticker marquee: constant-speed loop, never scroll-coupled. */
+export const TICKER_LOOP_S = 48;
 
 /* Spiral helix (projects). */
 export const HELIX_ARM_ANGLES = [0, 45, 90, 135, 180] as const;
