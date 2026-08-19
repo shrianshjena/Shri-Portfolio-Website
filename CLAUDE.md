@@ -29,17 +29,27 @@ Fully static: one route, no API endpoints.
    delta, compliance badge).
 6. **Accessibility bar**: WCAG 2.2 AA. Decorative/3D variants are aria-hidden
    and always paired with an accessible equivalent. Small blue text uses
-   steel, never accent (contrast).
+   steel, never accent (contrast). Autonomous motion longer than 5s ships a
+   HOLD/RUN control (ticker, dial, hero 3D); attention pulses stay under one
+   sub-5s cycle; the footer clock's essential exception is recorded in code.
+7. **Two text systems, used deliberately**: `ScrambleText` (color-scanline
+   decrypt) for chapter headings, eyebrows and the hero; `Decode`
+   (`fx/Decode.tsx`, log-entry left-to-right resolve) for body copy and mono
+   readouts, with `reserveLayout` on any multi-line string and
+   `start="top bottom"` for page-floor consumers.
 
 ## Machine-specific gotchas (this dev machine)
 
 - The project sits on an exFAT volume and the user's Antigravity IDE holds
   file handles on previously used dist directories, which makes
-  `mkdir`/`scandir` fail with EPERM. Current dist dir is `.dist`
-  (`next.config.ts`), excluded in `tsconfig.json` and
-  `.vscode/settings.json` (watcher excludes). If a build suddenly EPERMs on
-  the dist dir, do not fight the handle: rotate `distDir` to a fresh name and
-  add it to all three exclusion lists. `handle64.exe` identifies holders.
+  `mkdir`/`scandir` fail with EPERM. Current local dist dir is `.dist4`
+  (`next.config.ts`; Vercel builds use the standard `.next`), excluded in
+  `tsconfig.json` and `.vscode/settings.json` (watcher excludes). The IDE
+  latches onto each newly created dist dir until it is restarted (rotations
+  so far: `.next-dist`, `.build`, `.dist`, `.dist2`, `.dist3`, `.dist4`), so
+  when a build EPERMs again, do not fight the handle: rotate `distDir` to a
+  fresh name and add it to all three exclusion lists. `handle64.exe`
+  identifies holders.
 - The default `.next` and older `.next-dist`/`.build` folders may linger
   locked until the IDE closes; they are gitignored, leave them.
 - `next dev` file-watching on this volume can serve stale modules after
@@ -64,7 +74,10 @@ Fully static: one route, no API endpoints.
 
 ## Deployment
 
-Target: new GitHub repo + Vercel project (`shrianshjena.vercel.app`).
-Env vars on Vercel: `NEXT_PUBLIC_WEB3FORMS_KEY`, `NEXT_PUBLIC_SITE_URL`.
-Local `gh` and `vercel` CLIs need interactive login by the user before any
-push/deploy.
+Live at https://shrianshjena.vercel.app from the GitHub repo
+`shrianshjena/Shri-Portfolio-Website`; pushes to `main` auto-deploy, so push
+only after a green local build and E2E.
+Env vars on Vercel: `NEXT_PUBLIC_WEB3FORMS_KEY`, `NEXT_PUBLIC_SITE_URL`
+(both have working fallbacks baked in). When the jenas.in domain is
+connected, set `NEXT_PUBLIC_SITE_URL=https://jenas.in` on Vercel and
+redeploy; every canonical/OG/sitemap/JSON-LD URL follows.

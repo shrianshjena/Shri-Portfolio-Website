@@ -26,7 +26,18 @@ track title in the UI.
 ## Imagery
 
 - Project screenshots are of the owner's own deployed platforms.
-- The vessel-deck photograph is the owner's own.
+- All photography is the owner's own or from the owner's project archives:
+  the position portrait, the vessel-rail portrait (SOLAS MODU ledger row),
+  the jack-up-rig field-record frame, and the CARLTSOLAS drone frame.
+
+## Tool marks (THE STACK)
+
+The 29 logos in `public/images/stack/` are vendored locally because the CSP
+allows no third-party image hosts. Sources: the owner's previous portfolio
+repository, and Simple Icons (simpleicons.org, CC0) for marks the old site
+hot-linked (Python, GitHub, Hugging Face, LangChain, Claude, Gemini,
+Perplexity, Notion, Figma). The marks remain their respective owners'
+trademarks and are used nominatively to state tool proficiency.
 
 ## Tooling
 

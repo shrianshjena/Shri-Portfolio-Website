@@ -57,15 +57,30 @@ Three tiers, implemented in every animated component via `gsap.matchMedia`:
 | `lite` | touch or <1024px, no reduced-motion | Fades and rises only; horizontal chapters become native swipe strips; helix becomes a grid |
 | `reduce` | `prefers-reduced-motion` | Final states set instantly; native scroll; Spline never mounts; poster only |
 
+Autonomous motion carries its own mechanism: anything moving longer than 5
+seconds ships a HOLD/RUN control (ticker, dial, hero 3D scene), attention
+pulses are bounded to a single sub-5s cycle (WCAG 2.2.2), and the per-second
+footer clock claims the live-clock essential exception (recorded in code).
+
 Signature set-pieces, each used exactly once:
 
 - **Preloader** (00): 0-100 tabular counter driven by the monotonic max of a
-  time drift and real asset progress (fonts, hero poster, first frame), capped
-  at 2.5s, session-skipped on revisit, exits with a scramble + clip-path wipe.
+  time drift and real asset progress (fonts, hero poster, first frame),
+  holding 9s on first visit for the Tom Brady quote with a SKIP control and
+  Enter/Escape dismissal; session revisits and reduced motion exit instantly;
+  exits with a scramble + clip-path wipe.
 - **Scramble text**: ScrambleTextPlugin reveal with a scanline sweeping down
   and color resolving from translucent steel to the element's color. All
   chapter eyebrows/headings (on enter) and the hero (on preloader handoff).
   Accessible copy is a real sr-only text node.
+- **Decode (log entry)**: the second text system, ported from the SOLAS MODU
+  build. Copy resolves left-to-right out of a glyph scramble; multi-line body
+  uses reserveLayout (invisible sizer plus absolute overlay at constant string
+  length, zero CLS). Position paragraphs, Record lines and bullets, contact
+  copy, footer signoff. Page-floor consumers pass `start="top bottom"`.
+- **RailHeader**: instrument column/band header. A ring dot that fills on
+  entry, a decoded mono label, and a hairline running to the container edge
+  with a terminal tick. Loop skill groups, Stack bands, Foundations columns.
 - **Ticker** (between 01 and 02): the site's only marquee; scroll-velocity
   coupled on desktop, plain autoplay on touch, static and swipeable under
   reduced motion; visible HOLD/RUN pause control (WCAG 2.2.2).
@@ -73,14 +88,20 @@ Signature set-pieces, each used exactly once:
   panel traversal while the backtest equity curve draws (DrawSVG) across the
   full track in the same scrubbed timeline; scroll position is the backtest
   timeline.
-- **Photo band** (04): the vessel-deck photograph as a 45vh duotone band,
+- **Photo band** (04): an offshore jack-up-rig frame as a 45vh duotone band,
   8 percent parallax, environmental crop, mono caption. Deliberately not a
-  portrait.
+  portrait; the 3:4 vessel-rail portrait lives inside the SOLAS MODU ledger
+  row instead.
 - **Spiral helix** (05): four live platforms on a rotating 3D ring (pinned,
   scrubbed 360 degrees, cosine opacity falloff). The accessible grid variant
   stays in the DOM; keyboard focus reveals it as a visible panel.
-- **Instrument dial** (06): tick-ring rotation scrubbed by scroll through five
-  detents (RESEARCH, BUILD, BACKTEST, DEPLOY, REVIEW).
+- **Instrument dial** (06): tick-ring spinning autonomously (48s full / 90s
+  lite per revolution) with timed detent cycling through RESEARCH, BUILD,
+  BACKTEST, DEPLOY, REVIEW; every detent description stays readable, a
+  HOLD/RUN control pauses the motion, and the spin parks offscreen.
+- **Stack tile wall** (07): 29 monochrome tool marks in three hairline bands;
+  tiles settle from an alternating 8-degree tilt with a small drift in a
+  scrubbed scroll-rotation as each band transits the viewport.
 - **Custom cursor / magnetic buttons / grain**: fine-pointer only; grain is a
   static SVG turbulence tile at 5 percent.
 
@@ -92,10 +113,12 @@ magnetic release).
 
 - One idea per viewport; section rhythm `py-28 md:py-40`; gutters
   `px-6 md:px-12 lg:px-20`.
-- Chapters are numbered 01-08 with mono eyebrows
-  (`03 · PRIVATE BUILDS / DEEPSEA FINVEST`).
+- Chapters are numbered 01-09 with mono eyebrows
+  (`03 · PRIVATE BUILDS / DEEPSEA FINVEST`); 07 is THE STACK.
 - Nav: fixed 56px, hairline bottom border, raw navy, three zones
   (ident / anchors / audio module). Mobile menu is a full-screen dialog with a
   real focus trap.
-- Footer: giant mailto, three mono columns (CHANNELS with GitHub first, INDEX,
-  TELEMETRY), chess-motif signoff `YOU VS YOU · EVERY SESSION`.
+- Footer: giant mailto with a page-floor decode and hover re-decode, three
+  mono columns (CHANNELS with GitHub first, the full 01-09 INDEX, DESK STATUS
+  with a live IST clock and NSE session line), rights and BUILT BY lines,
+  chess-motif signoff `YOU VS YOU · EVERY SESSION`.

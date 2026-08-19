@@ -1,5 +1,77 @@
 # Changelog
 
+## 1.1.0 — 2026-08-19
+
+User-review round: identity assets and share cards, the previous site's
+preloader quote, imagery through every chapter, a new tech-stack chapter and
+a motion pass over the quieter sections.
+
+### Added
+
+- SJ monogram identity: favicon, app and apple-touch icons, web manifest,
+  theme color, and a static 1200x630 Open Graph / Twitter share card
+  generated from the design tokens (`scripts/generate-og.mjs`).
+- Preloader quote: the Tom Brady quote from the previous site on a 9-second
+  first-visit reading hold, with content-driven boot lines (no tooling
+  named), a SKIP control plus Enter/Escape dismissal (WCAG 2.2.1), inert
+  focus containment behind the overlay, and an idempotent early finish.
+- New chapter 07 THE STACK: 29 locally vendored tool marks in three hairline
+  bands (ANALYSIS / BUILD & SHIP / AI SYSTEMS) settling from an alternating
+  tilt in a scrubbed scroll-rotation. Foundations and Contact renumbered
+  08/09; nav and the footer index follow.
+- Decode text system (`fx/Decode.tsx`), the SOLAS MODU log-entry port: copy
+  resolves left-to-right out of a glyph scramble, with reserveLayout for
+  zero-CLS multi-line body. Applied to Position paragraphs, Record lines and
+  bullets, contact copy and the footer signoff. RailHeader instrument device
+  for column and band headers.
+- Imagery: Position portrait (3:4), Record entry images for Al's & Jo's,
+  Deepsea Finvest and SOLAS MODU (3:4 vessel-rail portrait), a jack-up-rig
+  field-record band, analytics archive thumbnails, and the CARLTSOLAS drone
+  frame.
+- Hero music CTA at bottom center (THIS EXPERIENCE IS BETTER WITH MUSIC)
+  wired to the existing audio provider, with a bounded breathing loop.
+- Footer as a closing instrument panel: live IST desk clock with an NSE
+  open/closed session line, the full 01-09 chapter index, ALL RIGHTS
+  RESERVED and BUILT BY SHRIANSH JENA lines, and a page-floor decode on the
+  giant mailto.
+
+### Changed
+
+- Spline robot: `renderOnDemand` removed so the scene's autonomous facial
+  and blink animation actually plays; canvas enlarged to a 48 percent
+  column at 82svh with a recut poster; run state unified so offscreen,
+  hidden-tab and user HOLD all converge on one stop/play decision, and the
+  scene warms up behind the preloader hold.
+- The Loop dial rotates continuously (48s/90s per revolution) with timed
+  detent cycling, an always-readable detent list and a HOLD/RUN control;
+  skill columns cascade per item under RailHeader headers beside a scrubbed
+  sounding line.
+- Copy: DOWNLOAD CV became DOWNLOAD RESUME; "private wealth" became
+  "private wealth management"; SOLAS MODU serves ONGC, the American Bureau
+  of Shipping (ABS), Indian Oil and Mazagon Dock and links solasmodu.net
+  first; loop detent descriptions carry desk specifics.
+- Foundations: all three education numbers count up at the same display
+  scale; 8.6 CGPA keeps the section's single accent moment.
+- Contact: DESK OPEN status rail, decoded copy, per-field entrance stagger,
+  CSS-only focus underlines, scrambled submit and success states. The
+  Web3Forms submit flow is byte-identical.
+- Footer telemetry no longer names the site's own build tools.
+
+### Fixed (adversarially verified review round, 16 findings)
+
+- Spline power management: the render loop can no longer keep running
+  offscreen after a late scene load or a tab return while scrolled away.
+- WCAG mechanisms for every new autonomous motion: dial HOLD, hero 3D HOLD,
+  pulse loops bounded under one 5-second cycle, breathe trough raised to AA
+  contrast, timed-quote SKIP, inert page shell behind the preloader.
+- CountUp exposes a stable screen-reader value (sr-only final + aria-hidden
+  animated twin); Decode never replays across motion-tier changes;
+  preloader teardown and SSR quote flash fixed; `media-src data:` admits
+  the Spline runtime's codec probe.
+- Documented tradeoffs: per-element decode ScrollTriggers (once-only and
+  self-killing on a single static page) and the per-second footer clock
+  (live-clock essential exception, recorded in code).
+
 ## 1.0.0 — 2026-08-18
 
 Ground-up rebuild of shrianshjena.lovable.app, repositioning the portfolio

@@ -25,7 +25,7 @@ The site is fully static: one route, no API endpoints, no database.
 npm install
 cp .env.example .env.local   # fill NEXT_PUBLIC_WEB3FORMS_KEY
 npm run dev                  # http://localhost:3000
-npm run build && npm start   # production build (output in .dist)
+npm run build && npm start   # production build (local dist dir rotates; Vercel uses .next)
 ```
 
 Node 20.9+ required (`.nvmrc` pins 24).
@@ -41,11 +41,14 @@ src/
     providers/    SmoothScrollProvider (single RAF loop), LoadingProvider, AudioProvider
     preloader/    boot-sequence gate with a real-progress 0-100 counter
     nav/          fixed bar + accessible mobile overlay + audio toggle
-    hero/         headline + lazy Spline island (poster-first)
-    sections/     one component per chapter (02-08) + Footer
-    fx/           ScrambleText, TickerMarquee, EquityCurve, CountUp,
+    hero/         headline + lazy Spline island (poster-first) + music CTA
+    sections/     one component per chapter (02-09), Footer + footer/ islands
+                  (entrance motion, IST desk clock, page-floor mailto decode)
+    fx/           ScrambleText, Decode, TickerMarquee, EquityCurve, CountUp,
                   CustomCursor, MagneticButton, GrainOverlay
-    ui/           SectionShell, SectionHeading, Badge, ArrowLink
+    ui/           SectionShell, SectionHeading, Badge, ArrowLink, RailHeader
+scripts/          one-off asset generators (icons, image optimization,
+                  stack-logo vendoring, OG card screenshot)
 ```
 
 Rules that keep the codebase coherent:
@@ -65,8 +68,11 @@ CHANGELOG.md for history, CREDITS.md for third-party attribution.
 Vercel, framework preset auto-detected. Environment variables:
 
 - `NEXT_PUBLIC_WEB3FORMS_KEY` — public Web3Forms form identifier
-- `NEXT_PUBLIC_SITE_URL` — canonical URL for metadata/sitemap/JSON-LD
+- `NEXT_PUBLIC_SITE_URL` — canonical URL for metadata/sitemap/JSON-LD.
+  When the jenas.in domain is connected, set this to `https://jenas.in` on
+  Vercel and redeploy; every canonical/OG/sitemap/JSON-LD URL follows.
 
-Build output goes to `.dist` (see the note in `next.config.ts`: on this
-development machine an editor's file-watcher on exFAT can lock previously
-used dist directories; `.vscode/settings.json` excludes them from watching).
+Local build output goes to a rotating dist dir (currently `.dist4`); Vercel
+builds into the standard `.next` (see the note in `next.config.ts`: on this
+development machine an editor's file-watcher on exFAT locks previously used
+dist directories; `.vscode/settings.json` excludes them from watching).

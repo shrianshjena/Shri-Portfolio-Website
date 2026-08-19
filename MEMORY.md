@@ -3,6 +3,56 @@
 Running log of decisions and state that the code alone does not explain.
 Newest first.
 
+## 2026-08-19 · v1.1.0 shipped (commit f1db97f, live on Vercel)
+
+- **What shipped**: user-review round per the v1.1 brief. SJ favicon/app
+  icons/manifest/OG-Twitter share card; 9s Tom Brady preloader quote (first
+  visit only, SKIP + Enter/Escape dismiss); Spline `renderOnDemand` removed
+  (that prop froze the robot's autonomous blink/facial animation, the
+  reported bug) and the canvas enlarged to 48%/82svh with a recut poster;
+  bottom-center music CTA; Decode (SOLAS MODU log-entry port) applied to
+  Position/Record/Contact/footer copy; imagery in Position/Record/archive;
+  new 07 THE STACK scroll-rotation chapter (Foundations→08, Contact→09);
+  autonomous dial with HOLD; Foundations equal-scale count-ups; contact
+  motion pass; footer desk clock (IST + NSE session) with full index and
+  rights/credit lines. Copy: DOWNLOAD RESUME, private wealth management,
+  ABS replaces Reliance, solasmodu.net primary.
+- **Decisions**: 9s hold is first-visit-per-session only (user choice);
+  canonical URL stays env-driven until jenas.in DNS lands (user choice);
+  stack list curated to 29 (dropped Stripe/Shopify/ByteDance, user choice);
+  soundtrack stays 3 tracks (user choice). No Next.js/GSAP/Spline tiles in
+  THE STACK: the no-tech-mentions rule covers the site's own build tools
+  (preloader boot lines and footer telemetry cleaned accordingly), while
+  Claude Code/MCP stay in LOOP copy as professional identity. LOOP text
+  skills deliberately overlap STACK logos (competencies vs instruments).
+- **Review round**: 3-lens adversarial workflow, 16 verified findings; 14
+  fixed (Spline offscreen render leaks, WCAG 2.2.1 skip, 2.2.2 HOLD
+  controls and bounded pulses, inert page shell behind the preloader,
+  CountUp sr values, Decode tier-flip replay, SSR quote flash, teardown),
+  2 documented tradeoffs: ~54 per-element Decode ScrollTriggers (once-only,
+  self-killing, acceptable on a single static page; batch via a parent
+  trigger if refresh cost ever grows) and the per-second footer clock
+  (live-clock essential exception, recorded in DeskClock.tsx).
+- **Environment learnings**: the Antigravity IDE latches onto every newly
+  created dist dir until restarted; rotated .dist→.dist2→.dist3→.dist4 in
+  one working day. agent-browser hangs on this machine even attached over
+  CDP; the reliable driver is puppeteer-core connected to a hand-launched
+  SwiftShader Chrome (scripts in the session scratchpad). SwiftShader
+  compiles the Spline scene for minutes at desktop viewports: screenshots
+  time out mid-compile and the headline can be caught mid-scramble; both
+  are rig artifacts, not site bugs. Spline's runtime probes codec support
+  with a data: video, so CSP media-src needs `data:`.
+- **Verification**: local E2E (23 shots, 390/768/1440 + reduce), blink
+  check (two canvas frames 3s apart differ = scene animating), live E2E on
+  shrianshjena.vercel.app (head tags, all asset routes 200, updated CSP,
+  console clean), share-card head verified server-side.
+- **Open follow-ups**: user tests the contact form once from a real browser
+  on production (Cloudflare blocks automation); user shares the URL on
+  WhatsApp to confirm the OG card renders; user rotates the GitHub PAT
+  after final approval; jenas.in DNS + `NEXT_PUBLIC_SITE_URL` flip;
+  carltsolas.com still parked; licensed-audio question stands (public repo,
+  see CREDITS.md).
+
 ## 2026-08-18 · v1.0.0 built, reviewed, awaiting deploy auth
 
 - **State**: all eight chapters implemented and integrated; production build
