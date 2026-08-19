@@ -2,7 +2,7 @@
 
 import { useRef, type CSSProperties } from "react";
 import type { Platform } from "@/content/types";
-import { gsap, useGSAP, ScrollTrigger } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { EASE, MEDIA } from "@/lib/motion";
 import { HELIX_RADIUS_PX } from "@/lib/constants";
 import { PlatformCard } from "@/components/sections/PlatformCard";
@@ -85,12 +85,15 @@ export function HelixCarousel({ platforms }: HelixCarouselProps) {
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
-            /* This pin is created AFTER first paint (the grid-to-helix state
-             * swap), while ScrollTrigger refreshes triggers in CREATION
-             * order unless any trigger declares refreshPriority (that flag
-             * flips its global sort on). Without it, every refresh measures
-             * the sections below with this pin's 250% spacer reverted, so
-             * their once-triggers fire ~2.5 viewports early. */
+            /* This pin is created AFTER first paint (the grid-to-helix
+             * state swap), while ScrollTrigger refreshes triggers in
+             * CREATION order unless any trigger declares refreshPriority
+             * (that flag flips its global sort on). Priority is a LADDER,
+             * not a boolean: sort applies it as a -1e6 offset before
+             * document order, so the topmost pin needs the HIGHEST value
+             * (Desk = 2, this helix = 1, everything else = 0) or this pin
+             * would refresh before the Desk pin and measure its own start
+             * without the Desk spacer, pinning viewports too early. */
             refreshPriority: 1,
             onUpdate: (self) => shapeOpacity(self.progress),
           },
@@ -100,10 +103,9 @@ export function HelixCarousel({ platforms }: HelixCarouselProps) {
           { rotationY: 0 },
           { rotationY: FULL_TURN_DEG, ease: EASE.none },
         );
-        /* Re-measure everything below in document order now that the pin
-         * spacer exists (the auto-queued refresh alone runs unsorted). */
-        ScrollTrigger.sort();
-        ScrollTrigger.refresh();
+        /* No manual sort/refresh needed: declaring refreshPriority set the
+         * global sort flag at construction, and pin creation auto-queues a
+         * full (now sorted) refresh. */
       });
 
       /* Lite and reduce: the parent swaps back to the grid, so this stage is

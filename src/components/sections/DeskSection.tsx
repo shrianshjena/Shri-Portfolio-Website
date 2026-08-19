@@ -62,6 +62,11 @@ export function DeskSection({ data }: DeskSectionProps) {
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            /* Pin refresh ladder: pins refresh in DESCENDING priority, and
+             * the topmost pin must refresh first so every pin and trigger
+             * below it measures with this spacer applied (2 = Desk,
+             * 1 = helix, 0 = everything else in document order). */
+            refreshPriority: 2,
           },
         });
 

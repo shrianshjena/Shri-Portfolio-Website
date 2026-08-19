@@ -11,7 +11,7 @@ export const SITE: SiteContent = {
     siteName: "Shriansh Jena",
     title: "Shriansh Jena · Derivatives Trader · Systems Builder",
     description:
-      "NIFTY 50 options trader building the research, backtesting and alerting systems behind the trades. Capital markets, fintech and AI-augmented engineering, Mumbai.",
+      "Options trader building the research, backtesting and alerting systems behind the trades. Capital markets, fintech and AI-augmented engineering, Mumbai.",
     author: "Shriansh Jena",
     location: "Mumbai, India",
     keywords: [
@@ -213,8 +213,8 @@ export const SITE: SiteContent = {
           { label: "SOLASMODU.IN", href: "https://solasmodu.in", external: true },
         ],
         image: {
-          src: "/images/record/solas-site.webp",
-          alt: "solasmodu.net corporate site hero, a lifeboat passing a jack-up rig",
+          src: "/images/record/solas-crew.webp",
+          alt: "Offshore crew stepping from a rope-transfer basket onto a supply vessel deck",
         },
       },
       {
@@ -223,10 +223,6 @@ export const SITE: SiteContent = {
         period: "MAR 2024 · MAY 2024",
         line: "Revenue, subscription and product reporting across 2 departments; customer segmentation for targeted marketing.",
         bullets: [],
-        image: {
-          src: "/images/record/woodsman-portrait.webp",
-          alt: "Dual-monitor revenue and subscription dashboards at the WoodsMan desk",
-        },
       },
     ],
     photoBand: {

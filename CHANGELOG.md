@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.3.0 — 2026-08-20
+
+Regression repair round.
+
+### Fixed
+
+- IN PRODUCTION spiral overlapping earlier sections (v1.2 regression): the
+  helix pin's refreshPriority made it refresh BEFORE the Desk pin —
+  ScrollTrigger sorts by (-1e6 x priority) + document position — so it
+  measured its start with the Desk's pin spacer reverted and pinned
+  viewports early, covering THE RECORD. Pins now form a priority ladder
+  (Desk 2, helix 1, everything else 0 in document order) and the redundant
+  manual sort/refresh calls are removed.
+- Share-preview description still read "NIFTY 50 options trader": the v1.2
+  meta.description edit was consumed by a tooling gate and never retried.
+  Now applied; WhatsApp may serve its cached unfurl until the per-URL
+  cache expires (test with a fresh query string).
+- Ticker marquee rebuilt as a pure-CSS compositor animation per the SOLAS
+  MODU performance reference: keyframes plus animation-play-state pausing
+  plus an IntersectionObserver offscreen gate replace the GSAP loop
+  entirely, removing main-thread jank and the killable-tween hazard its
+  post-mortem documents.
+
+### Changed
+
+- SOLAS MODU record image is now the offshore crew-transfer photograph;
+  the WoodsMan row returns to text-only.
+- Record ledger images enter with a calm fade-settle (opacity plus a 1.04
+  scale, delayed behind the decode cascade) instead of the clip-path wipe.
+
 ## 1.2.0 — 2026-08-19
 
 Review round 2: broader trading identity, the desktop trigger-timing root

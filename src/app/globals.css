@@ -127,6 +127,30 @@ body {
   opacity: 0;
 }
 
+/* Compositor-driven marquee (ported from the SOLAS MODU build). The loop
+ * lives in CSS, never JS: a GSAP loop tween is killable by any sibling
+ * tween carrying overwrite semantics and stalls whenever the main thread
+ * does; a CSS animation survives both. One of this codebase's few earned
+ * will-change sites: the track animates for its entire lifetime. The
+ * global reduced-motion kill switch below neutralizes it. */
+@keyframes fx-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.fx-marquee-track {
+  animation: fx-marquee var(--marquee-duration, 48s) linear infinite;
+  will-change: transform;
+}
+.fx-marquee:hover .fx-marquee-track,
+.fx-marquee:focus-within .fx-marquee-track,
+.fx-marquee-paused .fx-marquee-track {
+  animation-play-state: paused;
+}
+
 /* CSS-only effect kill switch */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -3,6 +3,33 @@
 Running log of decisions and state that the code alone does not explain.
 Newest first.
 
+## 2026-08-20 · v1.3.0 shipped (regression repair)
+
+- **The v1.2 regression, fully understood**: ScrollTrigger.sort applies
+  refreshPriority as a -1e6 offset BEFORE document order, so the helix's
+  priority 1 made it refresh ahead of the Desk pin and measure its start
+  with the Desk spacer reverted → pinned viewports early over THE RECORD
+  (confirmed in the user's screen recording, frame ~88s). Priority is a
+  ladder: topmost pin highest (Desk 2, helix 1). Manual sort/refresh
+  removed (construction sets the sort flag; pin creation queues a sorted
+  refresh). Probe asserts: no pin 500px above the stage, pinned within
+  60px at it.
+- **Process lesson, twice-paid**: the Fact-Forcing Gate consumes the first
+  Write/Edit per file per session; in v1.2 the meta.description edit was
+  the consumed one and was never retried (that is why WhatsApp kept
+  showing "NIFTY 50 options trader"). Rule now: after any gated batch,
+  grep a completeness checklist of markers before verifying.
+- **Ticker is now pure CSS** (fx-marquee keyframes + play-state pause +
+  IO parking with newest-entry reads), ported from the SOLAS performance
+  reference; its post-mortem: a GSAP loop tween was killed by a sibling
+  overwrite tween and shipped frozen. HOLD button contributes a class.
+- **Imagery**: SOLAS row = offshore crew-transfer photo (solas-crew.webp,
+  top-anchored 16:10 crop); WoodsMan back to text-only; record images now
+  fade-settle (autoAlpha + 1.04 scale, 0.3s behind the decode cascade).
+- **Vercel Attack Challenge Mode** was active during this round (403
+  interstitial to curl); flagged to the user to review Firewall settings
+  since it can starve link-preview scrapers.
+
 ## 2026-08-19 · v1.2.0 shipped (review round 2, budget-lean)
 
 - **Root cause of the desktop premature-trigger bug**: GSAP refreshes

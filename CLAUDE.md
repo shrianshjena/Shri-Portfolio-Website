@@ -58,10 +58,16 @@ Fully static: one route, no API endpoints.
   edits; if the browser shows old code with the disk correct, restart the
   dev server.
 - GSAP refreshes ScrollTriggers in CREATION order and only document-sorts
-  when some trigger declares `refreshPriority`. Any pin created after first
-  paint (the helix mounts via a state swap) must set `refreshPriority` and
-  dispatch `ScrollTrigger.sort(); ScrollTrigger.refresh();`, or every
-  trigger below it measures against pre-pin layout and fires early.
+  when some trigger declares `refreshPriority` — and priority is a LADDER,
+  not a boolean: sort applies it as a -1e6 offset ahead of document order,
+  so the TOPMOST pin needs the HIGHEST value (Desk 2, helix 1, default 0)
+  or a lower pin refreshes first and measures its start without the
+  spacers above it (v1.2 shipped exactly that regression). Once any
+  priority exists, no manual sort/refresh calls are needed: pin creation
+  auto-queues a sorted refresh.
+- The ticker marquee is deliberately CSS-owned end to end (`fx-marquee`
+  in globals.css, per the SOLAS performance post-mortem: JS loop tweens
+  are killable and main-thread-bound). GSAP must never touch that track.
 - Headless Chrome here needs `--disable-gpu` (see
   `~/.claude/scripts/ab-chrome.sh`); WebGL then fails, so the Spline scene
   only renders with `--enable-unsafe-swiftshader --use-angle=swiftshader`.

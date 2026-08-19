@@ -10,20 +10,12 @@ const BUDGET_BYTES = 250 * 1024;
 
 const SOURCES = [
   {
-    src: "C:/Users/Admin/Downloads/SOLAS MODU Website Screenshot.png",
-    /* Full-desktop capture: trim the browser chrome and the taskbar so
-     * only the page viewport ships. */
-    crop: { left: 0, top: 140, width: 1920, height: 880 },
-    dest: "public/images/record/solas-site.webp",
+    src: "C:/Users/Admin/SOLAS MODU/Oil And Gas Crew_enhanced.jpg",
+    /* Top-anchored 16:10 crop shaves the foreground grating. */
+    crop: { left: 0, top: 0, width: 1440, height: 900 },
+    dest: "public/images/record/solas-crew.webp",
     width: 1000,
     height: 625,
-    quality: 78,
-  },
-  {
-    src: "C:/Users/Admin/Personal Portfolio Website/WoodsMan 1.png",
-    dest: "public/images/record/woodsman-portrait.webp",
-    width: 800,
-    height: 1067,
     quality: 78,
   },
   {

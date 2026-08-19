@@ -81,10 +81,12 @@ Signature set-pieces, each used exactly once:
 - **RailHeader**: instrument column/band header. A ring dot that fills on
   entry, a decoded mono label, and a hairline running to the container edge
   with a terminal tick. Loop skill groups, Stack bands, Foundations columns.
-- **Ticker** (between 01 and 02): the site's only marquee; a constant-speed,
-  fully auto-driven 48s loop (scroll never touches it), hover-pause on
-  desktop, static and swipeable under reduced motion; visible HOLD/RUN
-  pause control (WCAG 2.2.2).
+- **Ticker** (between 01 and 02): the site's only marquee; a constant-speed
+  48s loop that lives entirely in CSS on the compositor (`fx-marquee`;
+  scroll and JS never touch it), hover/focus pause via
+  `animation-play-state`, IntersectionObserver offscreen parking, static
+  and swipeable under reduced motion; visible HOLD/RUN pause control
+  (WCAG 2.2.2).
 - **Horizontal pinned chapter** (03 THE DESK): vertical scroll drives lateral
   panel traversal while the backtest equity curve draws (DrawSVG) across the
   full track in the same scrubbed timeline; scroll position is the backtest

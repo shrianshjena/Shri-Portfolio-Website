@@ -40,8 +40,8 @@ const BULLET_DECODE_STEP_S = 0.12;
 const BULLET_DECODE_MAX_S = 1.2;
 
 /* Ledger imagery: intrinsic dimensions per orientation, responsive size
- * hints, and the left-to-right wipe geometry (echoes the decode
- * direction). A "portrait" src marks the 3:4 asset; the rest are 16:10. */
+ * hints, and the fade-settle timing (the image follows the decode
+ * cascade). A "portrait" src marks the 3:4 asset; the rest are 16:10. */
 const PORTRAIT_SRC_HINT = "portrait";
 const PORTRAIT_WIDTH = 800;
 const PORTRAIT_HEIGHT = 1067;
@@ -49,9 +49,8 @@ const LANDSCAPE_WIDTH = 1000;
 const LANDSCAPE_HEIGHT = 625;
 const MEDIA_SIZES =
   "(min-width: 1024px) 300px, (min-width: 768px) 420px, 100vw";
-const MEDIA_CLIP_HIDDEN = "inset(0 100% 0 0)";
-const MEDIA_CLIP_SHOWN = "inset(0 0 0 0)";
-const MEDIA_SCALE_FROM = 1.06;
+const MEDIA_SCALE_FROM = 1.04;
+const MEDIA_FADE_DELAY_S = 0.3;
 
 /* One row of the employment ledger: period rail on the left, company,
  * role, summary line and "+" prefixed bullets in the middle, and an
@@ -238,8 +237,10 @@ export function RecordSection({ data }: RecordSectionProps) {
 
       const mm = gsap.matchMedia();
 
-      /* Full: row reveals, ledger image wipes (clip-path on the wrapper,
-       * settle-scale on the img), and the scrubbed photo parallax. */
+      /* Full: row reveals, a calm fade-settle on the ledger images
+       * (opacity on the figure, scale on the img), slightly delayed so
+       * the image follows the decode cascade instead of bursting in with
+       * the row, and the scrubbed photo parallax. */
       mm.add(MEDIA.full, () => {
         riseRows();
         mediaWraps.forEach((wrap) => {
@@ -253,20 +254,16 @@ export function RecordSection({ data }: RecordSectionProps) {
           });
           reveal.fromTo(
             wrap,
-            { clipPath: MEDIA_CLIP_HIDDEN },
-            {
-              clipPath: MEDIA_CLIP_SHOWN,
-              duration: DUR.slow,
-              ease: EASE.inOut,
-            },
-            0,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, duration: DUR.slow, ease: EASE.soft },
+            MEDIA_FADE_DELAY_S,
           );
           if (img) {
             reveal.fromTo(
               img,
               { scale: MEDIA_SCALE_FROM },
-              { scale: 1, duration: DUR.slow, ease: EASE.inOut },
-              0,
+              { scale: 1, duration: DUR.slow, ease: EASE.soft },
+              MEDIA_FADE_DELAY_S,
             );
           }
         });
@@ -298,7 +295,7 @@ export function RecordSection({ data }: RecordSectionProps) {
       mm.add(MEDIA.reduce, () => {
         gsap.set(rows, { clearProps: "opacity,transform" });
         if (mediaWraps.length > 0) {
-          gsap.set(mediaWraps, { clearProps: "clipPath" });
+          gsap.set(mediaWraps, { clearProps: "opacity,visibility" });
         }
         if (parallax) {
           gsap.set(parallax, { clearProps: "transform" });

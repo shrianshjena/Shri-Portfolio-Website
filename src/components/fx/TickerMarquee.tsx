@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
-import { MEDIA } from "@/lib/motion";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { TICKER_LOOP_S } from "@/lib/constants";
 import type { TickerContent, TickerItem, TickerTone } from "@/content/types";
 import { cn } from "@/lib/cn";
 
 /*
  * The site's only marquee: a financial-tape strip of verified static
- * figures on a constant-speed, fully auto-driven loop (scroll never
- * touches it). Desktop adds hover-pause; touch is plain autoplay; reduced
- * motion gets a static, horizontally swipeable strip. A visible HOLD/RUN
- * control satisfies WCAG 2.2.2 (pause for moving content).
+ * figures on a constant-speed, fully auto-driven CSS loop (scroll never
+ * touches it; the fx-marquee rules in globals.css explain why the loop
+ * must not live in JS). Hover and focus pause are pure CSS; the HOLD
+ * button and the offscreen gate contribute the fx-marquee-paused class.
+ * Reduced motion: the global CSS kill switch stops the animation and the
+ * strip stays horizontally swipeable. A visible HOLD/RUN control
+ * satisfies WCAG 2.2.2 (pause for moving content).
  */
+const IN_VIEW_MARGIN = "120px 0px";
 const TONE_CLASS: Record<TickerTone, string> = {
   default: "text-muted",
   accent: "text-steel",
@@ -52,85 +54,45 @@ function TickerRow({
 
 export function TickerMarquee({ data }: { readonly data: TickerContent }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const loopRef = useRef<gsap.core.Tween | null>(null);
-  const holdRef = useRef(false);
   const [held, setHeld] = useState(false);
+  const [inView, setInView] = useState(true);
 
-  /* The HOLD button freezes the tape regardless of tier or hover state. */
+  /* Park the animation offscreen. IntersectionObserver, not ScrollTrigger:
+   * observer geometry never goes stale after layout shifts. Read the
+   * NEWEST record: a fast scroll out and back batches [leave, enter] into
+   * one callback, and reading the first entry would re-freeze the strip. */
   useEffect(() => {
-    holdRef.current = held;
-    const loop = loopRef.current;
-    if (!loop) return;
-    gsap.to(loop, {
-      timeScale: held ? 0 : 1,
-      duration: 0.4,
-      overwrite: "auto",
-    });
-  }, [held]);
-
-  useGSAP(
-    () => {
-      const root = rootRef.current;
-      const track = trackRef.current;
-      if (!root || !track) return;
-
-      const buildLoop = () => {
-        const loop = gsap.to(track, {
-          xPercent: -50,
-          ease: "none",
-          duration: TICKER_LOOP_S,
-          repeat: -1,
-          force3D: true,
-        });
-        loopRef.current = loop;
-        return loop;
-      };
-
-      const mm = gsap.matchMedia();
-
-      mm.add(MEDIA.full, () => {
-        const loop = buildLoop();
-
-        const pause = (): void => {
-          gsap.to(loop, { timeScale: 0, duration: 0.4, overwrite: "auto" });
-        };
-        const resume = (): void => {
-          if (holdRef.current) return;
-          gsap.to(loop, { timeScale: 1, duration: 0.6, overwrite: "auto" });
-        };
-        root.addEventListener("pointerenter", pause);
-        root.addEventListener("pointerleave", resume);
-
-        return () => {
-          root.removeEventListener("pointerenter", pause);
-          root.removeEventListener("pointerleave", resume);
-          loop.kill();
-          loopRef.current = null;
-        };
-      });
-
-      mm.add(MEDIA.lite, () => {
-        const loop = buildLoop();
-        return () => {
-          loop.kill();
-          loopRef.current = null;
-        };
-      });
-      /* MEDIA.reduce: no loop is built; the strip stays static. */
-    },
-    { scope: rootRef },
-  );
+    const root = rootRef.current;
+    if (!root) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setInView(entries[entries.length - 1].isIntersecting);
+      },
+      { rootMargin: IN_VIEW_MARGIN },
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div ref={rootRef} data-cursor="hold" className="hairline-t hairline-b py-5">
+    <div
+      ref={rootRef}
+      data-cursor="hold"
+      className={cn(
+        "fx-marquee hairline-t hairline-b py-5",
+        (held || !inView) && "fx-marquee-paused",
+      )}
+    >
       <div
         role="region"
         aria-label="Career figures ticker"
         tabIndex={0}
         className="overflow-hidden motion-reduce:overflow-x-auto motion-reduce:no-scrollbar"
       >
-        <div ref={trackRef} className="flex w-max will-change-transform">
+        <div
+          className="fx-marquee-track flex w-max"
+          style={{ "--marquee-duration": `${TICKER_LOOP_S}s` } as CSSProperties}
+        >
           <TickerRow items={data.items} />
           <TickerRow items={data.items} hidden />
         </div>
