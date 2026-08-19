@@ -7,6 +7,7 @@ import { DeskSection } from "@/components/sections/DeskSection";
 import { RecordSection } from "@/components/sections/RecordSection";
 import { ProductionSection } from "@/components/sections/ProductionSection";
 import { LoopSection } from "@/components/sections/LoopSection";
+import { StackSection } from "@/components/sections/StackSection";
 import { FoundationsSection } from "@/components/sections/FoundationsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/sections/Footer";
@@ -15,7 +16,7 @@ import { SITE } from "@/content/site";
 export default function Home() {
   return (
     <>
-      <Preloader />
+      <Preloader data={SITE.preloader} />
       <Nav />
       <main id="main-content">
         <HeroSection data={SITE.hero} />
@@ -25,6 +26,7 @@ export default function Home() {
         <RecordSection data={SITE.record} />
         <ProductionSection data={SITE.production} />
         <LoopSection data={SITE.loop} />
+        <StackSection data={SITE.stack} />
         <FoundationsSection data={SITE.foundations} />
         <ContactSection data={SITE.contact} />
       </main>

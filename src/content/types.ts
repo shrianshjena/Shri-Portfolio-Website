@@ -7,6 +7,11 @@ export interface Cta {
   readonly external?: boolean;
 }
 
+export interface ContentImage {
+  readonly src: string;
+  readonly alt: string;
+}
+
 export interface NavAnchor {
   readonly num: string;
   readonly label: string;
@@ -20,6 +25,13 @@ export interface HeroContent {
   readonly ctas: readonly Cta[];
   readonly audioHint: string;
   readonly posterAlt: string;
+}
+
+export interface PreloaderContent {
+  readonly bootLines: readonly string[];
+  readonly quoteLead: string;
+  readonly quoteEmphasis: string;
+  readonly attribution: string;
 }
 
 export type TickerTone = "default" | "accent" | "amber";
@@ -44,6 +56,7 @@ export interface SectionId {
 export interface PositionContent extends SectionId {
   readonly lead: string;
   readonly paragraphs: readonly string[];
+  readonly image: ContentImage;
 }
 
 export interface Metric {
@@ -88,7 +101,8 @@ export interface RecordRole {
   readonly period: string;
   readonly line: string;
   readonly bullets: readonly string[];
-  readonly link?: Cta;
+  readonly links?: readonly Cta[];
+  readonly image?: ContentImage;
   readonly crossRef?: string;
 }
 
@@ -141,6 +155,21 @@ export interface LoopContent extends SectionId {
   readonly skills: readonly SkillGroup[];
 }
 
+export interface StackTool {
+  readonly name: string;
+  readonly icon: string;
+}
+
+export interface StackGroup {
+  readonly label: string;
+  readonly tools: readonly StackTool[];
+}
+
+export interface StackContent extends SectionId {
+  readonly intro: string;
+  readonly groups: readonly StackGroup[];
+}
+
 export interface EducationEntry {
   readonly institution: string;
   readonly credential: string;
@@ -152,7 +181,6 @@ export interface Certification {
   readonly title: string;
   readonly issuer: string;
   readonly url: string;
-  readonly image: string;
 }
 
 export interface FoundationsContent extends SectionId {
@@ -166,6 +194,7 @@ export interface ContactContent extends SectionId {
   readonly phone: string;
   readonly phoneDisplay: string;
   readonly ctaLabel: string;
+  readonly statusLine: string;
   readonly form: {
     readonly nameLabel: string;
     readonly emailLabel: string;
@@ -180,7 +209,10 @@ export interface ContactContent extends SectionId {
 
 export interface FooterContent {
   readonly channels: readonly Cta[];
+  /* Complete chapter index, including chapters the top nav omits. */
+  readonly index: readonly NavAnchor[];
   readonly telemetry: readonly string[];
+  readonly builtBy: string;
   readonly signoff: string;
   readonly copyright: string;
 }
@@ -206,12 +238,14 @@ export interface SiteContent {
     readonly anchors: readonly NavAnchor[];
   };
   readonly hero: HeroContent;
+  readonly preloader: PreloaderContent;
   readonly ticker: TickerContent;
   readonly position: PositionContent;
   readonly desk: DeskContent;
   readonly record: RecordContent;
   readonly production: ProductionContent;
   readonly loop: LoopContent;
+  readonly stack: StackContent;
   readonly foundations: FoundationsContent;
   readonly contact: ContactContent;
   readonly footer: FooterContent;

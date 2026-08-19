@@ -5,10 +5,12 @@ import Image from "next/image";
 import type { PhotoBand, RecordContent, RecordRole } from "@/content/types";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { DUR, EASE, MEDIA } from "@/lib/motion";
+import { cn } from "@/lib/cn";
 import { SectionShell } from "@/components/ui/SectionShell";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { Badge } from "@/components/ui/Badge";
+import { Decode } from "@/components/fx/Decode";
 
 interface RecordSectionProps {
   readonly data: RecordContent;
@@ -28,26 +30,69 @@ const ROW_RISE_Y = 32;
 const ROW_START = "top 85%";
 const PARALLAX_RANGE = 8;
 
+/* Decode cascade inside each row: the period leads, role and summary
+ * follow, bullets trail one step apart. Bullet copy decodes on desktop
+ * only (tiers="full"); everywhere else it stays a plain reveal. */
+const ROLE_DECODE_DELAY_S = 0.1;
+const LINE_DECODE_DELAY_S = 0.25;
+const BULLET_DECODE_BASE_S = 0.45;
+const BULLET_DECODE_STEP_S = 0.12;
+const BULLET_DECODE_MAX_S = 1.2;
+
+/* Ledger imagery: intrinsic dimensions per orientation, responsive size
+ * hints, and the left-to-right wipe geometry (echoes the decode
+ * direction). A "portrait" src marks the 3:4 asset; the rest are 16:10. */
+const PORTRAIT_SRC_HINT = "portrait";
+const PORTRAIT_WIDTH = 800;
+const PORTRAIT_HEIGHT = 1067;
+const LANDSCAPE_WIDTH = 1000;
+const LANDSCAPE_HEIGHT = 625;
+const MEDIA_SIZES =
+  "(min-width: 1024px) 300px, (min-width: 768px) 420px, 100vw";
+const MEDIA_CLIP_HIDDEN = "inset(0 100% 0 0)";
+const MEDIA_CLIP_SHOWN = "inset(0 0 0 0)";
+const MEDIA_SCALE_FROM = 1.06;
+
 /* One row of the employment ledger: period rail on the left, company,
- * role, summary line and "+" prefixed bullets on the right. */
+ * role, summary line and "+" prefixed bullets in the middle, and an
+ * optional evidence image (right rail on desktop, below the text block
+ * on smaller screens). The company name rises plain with the wrapper;
+ * everything else decodes in a cascade. GSAP owns clip-path on the
+ * figure and transform on the img; the CSS hover transition touches
+ * filter only (one engine per property). */
 function LedgerRow({ role }: LedgerRowProps) {
+  const isPortrait = role.image?.src.includes(PORTRAIT_SRC_HINT) ?? false;
+
   return (
     <article
       data-row
-      className="hairline-t grid grid-cols-1 gap-6 py-10 md:grid-cols-[200px_1fr]"
+      className="hairline-t grid grid-cols-1 gap-6 py-10 md:grid-cols-[200px_1fr] lg:grid-cols-[180px_minmax(0,1fr)_minmax(240px,300px)] lg:gap-10"
     >
-      <p className="eyebrow text-muted">{role.period}</p>
+      <Decode as="p" className="eyebrow text-muted">
+        {role.period}
+      </Decode>
       <div>
         <h3 className="text-xl uppercase tracking-wide text-fg md:text-2xl">
           {role.company}
         </h3>
-        <p className="eyebrow mt-1 text-steel">{role.role}</p>
-        <p className="mt-3 max-w-[60ch] leading-relaxed text-muted">
+        <Decode
+          as="p"
+          delay={ROLE_DECODE_DELAY_S}
+          className="eyebrow mt-1 text-steel"
+        >
+          {role.role}
+        </Decode>
+        <Decode
+          as="p"
+          reserveLayout
+          delay={LINE_DECODE_DELAY_S}
+          className="mt-3 max-w-[60ch] leading-relaxed text-muted"
+        >
           {role.line}
-        </p>
+        </Decode>
         {role.bullets.length > 0 ? (
           <ul className="mt-4 space-y-2">
-            {role.bullets.map((bullet) => (
+            {role.bullets.map((bullet, bulletIndex) => (
               <li
                 key={bullet}
                 className="flex gap-3 text-sm leading-relaxed text-muted"
@@ -55,18 +100,33 @@ function LedgerRow({ role }: LedgerRowProps) {
                 <span aria-hidden="true" className="mono-nums text-steel">
                   +
                 </span>
-                <span className="max-w-[64ch]">{bullet}</span>
+                <Decode
+                  as="span"
+                  reserveLayout
+                  tiers="full"
+                  delay={
+                    BULLET_DECODE_BASE_S + bulletIndex * BULLET_DECODE_STEP_S
+                  }
+                  maxDuration={BULLET_DECODE_MAX_S}
+                  className="max-w-[64ch]"
+                >
+                  {bullet}
+                </Decode>
               </li>
             ))}
           </ul>
         ) : null}
-        {role.link || role.crossRef ? (
+        {role.links?.length || role.crossRef ? (
           <div className="mt-6 flex flex-wrap items-center gap-6">
-            {role.link ? (
-              <ArrowLink href={role.link.href} external={role.link.external}>
-                {role.link.label}
+            {role.links?.map((link) => (
+              <ArrowLink
+                key={link.href}
+                href={link.href}
+                external={link.external}
+              >
+                {link.label}
               </ArrowLink>
-            ) : null}
+            ))}
             {role.crossRef ? (
               <a href="#desk" data-cursor="link" className="inline-block">
                 <Badge tone="steel">{role.crossRef}</Badge>
@@ -75,6 +135,24 @@ function LedgerRow({ role }: LedgerRowProps) {
           </div>
         ) : null}
       </div>
+      {role.image ? (
+        <figure
+          data-media
+          className={cn(
+            "w-full overflow-hidden md:col-start-2 md:max-w-[420px] lg:col-start-3 lg:row-start-1 lg:max-w-none lg:self-start",
+            isPortrait ? "aspect-[3/4] max-h-[70svh]" : "aspect-[16/10]",
+          )}
+        >
+          <Image
+            src={role.image.src}
+            alt={role.image.alt}
+            width={isPortrait ? PORTRAIT_WIDTH : LANDSCAPE_WIDTH}
+            height={isPortrait ? PORTRAIT_HEIGHT : LANDSCAPE_HEIGHT}
+            sizes={MEDIA_SIZES}
+            className="h-full w-full object-cover grayscale-[30%] transition-[filter] duration-500 hover:grayscale-0"
+          />
+        </figure>
+      ) : null}
     </article>
   );
 }
@@ -115,7 +193,9 @@ function PhotoBandFigure({ band }: PhotoBandFigureProps) {
 
 /* Chapter 04, The Record. A vertical employment ledger, one hairline row
  * per role, interrupted after the SOLAS MODU entry by the full-bleed
- * offshore photo band. Rows rise in once on enter (full + lite); the band
+ * offshore photo band. Rows rise in once on enter (full + lite) and the
+ * row copy decodes in a cascade; ledger images wipe in left-to-right on
+ * the full tier (lite: they join the row rise; reduce: static). The band
  * gets a scrubbed vertical parallax on the full tier only. */
 export function RecordSection({ data }: RecordSectionProps) {
   const scopeRef = useRef<HTMLDivElement>(null);
@@ -129,6 +209,10 @@ export function RecordSection({ data }: RecordSectionProps) {
       if (!scope) return;
 
       const rows = gsap.utils.toArray<HTMLElement>("[data-row]", scope);
+      const mediaWraps = gsap.utils.toArray<HTMLElement>(
+        "[data-media]",
+        scope,
+      );
       const band = scope.querySelector<HTMLElement>("[data-band]");
       const parallax = scope.querySelector<HTMLElement>("[data-parallax]");
 
@@ -154,9 +238,38 @@ export function RecordSection({ data }: RecordSectionProps) {
 
       const mm = gsap.matchMedia();
 
-      /* Full: row reveals plus the scrubbed photo parallax. */
+      /* Full: row reveals, ledger image wipes (clip-path on the wrapper,
+       * settle-scale on the img), and the scrubbed photo parallax. */
       mm.add(MEDIA.full, () => {
         riseRows();
+        mediaWraps.forEach((wrap) => {
+          const img = wrap.querySelector("img");
+          const reveal = gsap.timeline({
+            scrollTrigger: {
+              trigger: wrap,
+              start: ROW_START,
+              once: true,
+            },
+          });
+          reveal.fromTo(
+            wrap,
+            { clipPath: MEDIA_CLIP_HIDDEN },
+            {
+              clipPath: MEDIA_CLIP_SHOWN,
+              duration: DUR.slow,
+              ease: EASE.inOut,
+            },
+            0,
+          );
+          if (img) {
+            reveal.fromTo(
+              img,
+              { scale: MEDIA_SCALE_FROM },
+              { scale: 1, duration: DUR.slow, ease: EASE.inOut },
+              0,
+            );
+          }
+        });
         if (band && parallax) {
           gsap.fromTo(
             parallax,
@@ -175,7 +288,8 @@ export function RecordSection({ data }: RecordSectionProps) {
         }
       });
 
-      /* Lite: simple row rises only, no scrubs, no pins. */
+      /* Lite: simple row rises only; images join the row rise, no wipes,
+       * no scrubs, no pins. */
       mm.add(MEDIA.lite, () => {
         riseRows();
       });
@@ -183,6 +297,9 @@ export function RecordSection({ data }: RecordSectionProps) {
       /* Reduce: everything static at its final state. */
       mm.add(MEDIA.reduce, () => {
         gsap.set(rows, { clearProps: "opacity,transform" });
+        if (mediaWraps.length > 0) {
+          gsap.set(mediaWraps, { clearProps: "clipPath" });
+        }
         if (parallax) {
           gsap.set(parallax, { clearProps: "transform" });
         }

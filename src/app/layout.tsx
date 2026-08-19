@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { generalSans, jetbrainsMono } from "@/lib/fonts";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { SITE } from "@/content/site";
@@ -26,6 +26,10 @@ export const metadata: Metadata = {
     title: SITE.meta.title,
     description: SITE.meta.description,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050a16",
 };
 
 const personJsonLd = {

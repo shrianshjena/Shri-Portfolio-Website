@@ -13,6 +13,11 @@ import { cn } from "@/lib/cn";
  * horizontally translated pinned tracks (the Desk chapter), where document
  * scroll position says nothing about whether the panel is on screen.
  * Tabular numerals prevent width jitter.
+ *
+ * Mirroring the Decode sr-only pattern, the animated span is aria-hidden
+ * and paired with an sr-only twin holding the formatted final value, so
+ * assistive tech and find-in-page always read the real number instead of
+ * the 0 the animation starts from.
  */
 interface CountUpProps {
   readonly value: number;
@@ -31,14 +36,14 @@ export function CountUp({
   duration = 1.6,
   className,
 }: CountUpProps) {
-  const ref = useRef<HTMLSpanElement>(null);
+  const animatedRef = useRef<HTMLSpanElement>(null);
 
   const format = (current: number): string =>
     `${prefix}${current.toFixed(decimals)}${suffix}`;
 
   useGSAP(
     () => {
-      const el = ref.current;
+      const el = animatedRef.current;
       if (!el) return;
       if (window.matchMedia(MEDIA.reduce).matches) return;
 
@@ -63,12 +68,15 @@ export function CountUp({
       observer.observe(el);
       return () => observer.disconnect();
     },
-    { scope: ref },
+    { scope: animatedRef },
   );
 
   return (
-    <span ref={ref} className={cn("mono-nums", className)}>
-      {format(value)}
+    <span className={cn("mono-nums", className)}>
+      <span className="sr-only">{format(value)}</span>
+      <span aria-hidden="true" ref={animatedRef}>
+        {format(value)}
+      </span>
     </span>
   );
 }

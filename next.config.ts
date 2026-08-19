@@ -9,7 +9,8 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "media-src 'self'",
+  /* data: lets the Spline runtime run its inline-video codec probe. */
+  "media-src 'self' data:",
   "connect-src 'self' https://prod.spline.design https://unpkg.com https://api.web3forms.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
@@ -42,7 +43,7 @@ const nextConfig: NextConfig = {
    * language servers in tsconfig). Vercel builds in a clean container and
    * its output collection expects the standard .next directory, so the
    * workaround must not apply there. */
-  distDir: process.env.VERCEL ? ".next" : ".dist",
+  distDir: process.env.VERCEL ? ".next" : ".dist4",
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
   compiler: {

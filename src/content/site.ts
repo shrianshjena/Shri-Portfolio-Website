@@ -35,7 +35,8 @@ export const SITE: SiteContent = {
       { num: "03", label: "DESK", href: "#desk" },
       { num: "04", label: "RECORD", href: "#record" },
       { num: "05", label: "WORK", href: "#production" },
-      { num: "08", label: "CONTACT", href: "#contact" },
+      { num: "07", label: "STACK", href: "#stack" },
+      { num: "09", label: "CONTACT", href: "#contact" },
     ],
   },
 
@@ -45,10 +46,22 @@ export const SITE: SiteContent = {
     sub: "NIFTY options trader building the research, backtesting and alerting systems behind the trades.",
     ctas: [
       { label: "VIEW THE DESK", href: "#desk" },
-      { label: "DOWNLOAD CV", href: "/docs/Shriansh_Jena_Resume.pdf", external: true },
+      { label: "DOWNLOAD RESUME", href: "/docs/Shriansh_Jena_Resume.pdf", external: true },
     ],
-    audioHint: "SOUND AVAILABLE · 03 TRACKS · ARM IN NAV",
+    audioHint: "THIS EXPERIENCE IS BETTER WITH MUSIC",
     posterAlt: "Interactive 3D robot, idle frame",
+  },
+
+  preloader: {
+    bootLines: [
+      "DESK · MUMBAI · IST · SESSION OPENING",
+      "RECORD · BACKTEST CAGR 27.24% · ISINS 200+",
+      "AUDIO · 03 TRACKS · STANDING BY",
+    ],
+    quoteLead:
+      "\"To be successful at anything, the truth is you don't have to be special. You just have to be what most people aren't - ",
+    quoteEmphasis: "consistent, determined, and willing to work for it.\"",
+    attribution: "- Tom Brady",
   },
 
   ticker: {
@@ -76,9 +89,13 @@ export const SITE: SiteContent = {
     paragraphs: [
       "I trade NIFTY 50 index options. Defined-risk selling, iron condors, short straddles, trend-filtered entries. I reached consistent profitability inside my first year, and I got there by refusing to run any idea I could not test.",
       "So I built the test bench. A Python backtesting engine with a full India cost model, STT, brokerage, slippage, stamp duty, fed by Dhan and ICICI Breeze APIs. My multifactor EMA options-selling strategy holds a 27.24% CAGR across a two year, four month backtest.",
-      "At Deepsea Finvest, a private wealth desk, that discipline became infrastructure. A bond monitor that screens NSE and Bondbazaar and pushes secured AAA and AA alerts inside ten seconds. A master model turning 200+ ISINs into client deliverables. A catch that kept the desk inside SEBI's algo rules.",
+      "At Deepsea Finvest, a private wealth management desk, that discipline became infrastructure. A bond monitor that screens NSE and Bondbazaar and pushes secured AAA and AA alerts inside ten seconds. A master model turning 200+ ISINs into client deliverables. A catch that kept the desk inside SEBI's algo rules.",
       "I ship through AI-augmented workflows, Claude Code, MCP, agent systems, and I own the architecture and the review. The market keeps score. I like that.",
     ],
+    image: {
+      src: "/images/position-portrait.webp",
+      alt: "Shriansh Jena, evening portrait in a linen shirt",
+    },
   },
 
   desk: {
@@ -86,8 +103,8 @@ export const SITE: SiteContent = {
     eyebrow: "03 · PRIVATE BUILDS / DEEPSEA FINVEST",
     heading: "THE DESK",
     anchor: "desk",
-    introLine: "Built for a private wealth desk. No public links. The systems run anyway.",
-    contextLine: "CONTRACT · DEEPSEA FINVEST · PRIVATE WEALTH · MUMBAI · APR-JUN 2026",
+    introLine: "Built for a private wealth management desk. No public links. The systems run anyway.",
+    contextLine: "CONTRACT · DEEPSEA FINVEST · PRIVATE WEALTH MANAGEMENT · MUMBAI · APR-JUN 2026",
     panels: [
       {
         id: "backtest-engine",
@@ -160,30 +177,45 @@ export const SITE: SiteContent = {
           "Cut time-to-publish for new catalogue items by about 60% by structuring the WooCommerce content model and standardising listing templates across 4 to 6 categories.",
           "Automating catalogue updates through a custom Model Context Protocol integration against the WordPress API.",
         ],
-        link: { label: "ALSANDJOS.COM", href: "https://alsandjos.com", external: true },
+        links: [{ label: "ALSANDJOS.COM", href: "https://alsandjos.com", external: true }],
+        image: {
+          src: "/images/record/als-and-jos.webp",
+          alt: "Al's & Jo's online home decor storefront",
+        },
       },
       {
         company: "DEEPSEA FINVEST",
         role: "DEVELOPER · AUTOMATED SYSTEMS & AI WORKFLOWS · CONTRACT",
         period: "APR 2026 · JUN 2026",
-        line: "Private wealth desk, Mumbai. Bond monitoring, backtesting and deliverable pipelines.",
+        line: "Private wealth management desk, Mumbai. Bond monitoring, backtesting and deliverable pipelines.",
         bullets: [
           "Moved a fixed-income operation from manual screening and hand-assembled documents to automated monitoring and repeatable deliverable production.",
         ],
+        image: {
+          src: "/images/record/deepsea-finvest.webp",
+          alt: "Financial performance reporting spread across a desk",
+        },
         crossRef: "SYSTEMS → CH.03",
       },
       {
         company: "SOLAS MODU",
         role: "ASSOCIATE ANALYST · BUSINESS & OPERATIONS",
         period: "JUN 2024 · MAR 2026",
-        line: "Marine and offshore consultancy serving ONGC, Reliance, Indian Oil and Mazagon Dock.",
+        line: "Marine and offshore consultancy serving ONGC, the American Bureau of Shipping (ABS), Indian Oil and Mazagon Dock.",
         bullets: [
           "Led the full redesign and rebuild of the corporate website, giving each of 6 service divisions a dedicated page.",
           "Structured a decade of offshore history into an operations log covering 11+ campaigns for ONGC, IOCL and Jagson, 2013 through contracts running to 2029.",
           "Built a certificates and approvals registry covering 45+ certificates and 16 class society and client relationships.",
           "Replaced manual performance compilation with interactive KPI dashboards across 3 strategic initiatives.",
         ],
-        link: { label: "SOLASMODU.IN", href: "https://solasmodu.in", external: true },
+        links: [
+          { label: "SOLASMODU.NET", href: "https://solasmodu.net", external: true },
+          { label: "SOLASMODU.IN", href: "https://solasmodu.in", external: true },
+        ],
+        image: {
+          src: "/images/record/solas-portrait.webp",
+          alt: "Shriansh Jena at the rail of a vessel during an offshore campaign",
+        },
       },
       {
         company: "WOODSMAN",
@@ -194,8 +226,8 @@ export const SITE: SiteContent = {
       },
     ],
     photoBand: {
-      src: "/images/field-record.jpg",
-      alt: "Shriansh Jena in offshore gear on a vessel deck at sea",
+      src: "/images/field-record.webp",
+      alt: "Jack-up rig standing at open sea during an offshore campaign, India",
       caption: "FIELD RECORD · MODU CAMPAIGN · OFFSHORE INDIA",
     },
   },
@@ -239,7 +271,7 @@ export const SITE: SiteContent = {
         description:
           "Technology venture delivering modern software and AI-integrated solutions to the marine and maritime industry, with expansion into fintech. Designed and shipped the production launch platform.",
         url: "https://carltsolas-website.vercel.app",
-        image: "/images/projects/project-carltsolas.png",
+        image: "/images/projects/project-carltsolas.webp",
         status: "LIVE",
       },
     ],
@@ -279,11 +311,31 @@ export const SITE: SiteContent = {
     intro:
       "AI-augmented delivery with human-owned judgement. Agents compress the build; architecture, review and validation never leave my hands.",
     detents: [
-      { label: "RESEARCH", description: "Markets first. Filings, flows and the questions a desk actually asks." },
-      { label: "BUILD", description: "Claude Code, MCP integrations, agent skills, harnesses and swarms." },
-      { label: "BACKTEST", description: "No idea ships without surviving the full India cost model." },
-      { label: "DEPLOY", description: "Production systems on broker APIs, alert channels and Vercel." },
-      { label: "REVIEW", description: "Architecture, code and output validated by hand, every stage." },
+      {
+        label: "RESEARCH",
+        description:
+          "Markets first. NIFTY 50 options structures, NSE and Bondbazaar listings, filings and flows, cut down to the questions a desk actually asks.",
+      },
+      {
+        label: "BUILD",
+        description:
+          "Claude Code, MCP integrations, agent skills, harnesses and swarms, wired into Dhan and ICICI Breeze broker APIs and desk workflows.",
+      },
+      {
+        label: "BACKTEST",
+        description:
+          "No idea ships without surviving the full India cost model, STT, brokerage, slippage and stamp duty. The reference strategy holds 27.24% CAGR across a 28 month backtest.",
+      },
+      {
+        label: "DEPLOY",
+        description:
+          "Production systems on Dhan and ICICI Breeze APIs, Telegram and Discord channels and Vercel. The bonds sentinel pushes qualifying alerts inside 10 seconds.",
+      },
+      {
+        label: "REVIEW",
+        description:
+          "Architecture, code and output validated by hand at every stage. The SEBI algo compliance catch came from review, before deployment.",
+      },
     ],
     skills: [
       {
@@ -327,9 +379,64 @@ export const SITE: SiteContent = {
     ],
   },
 
-  foundations: {
+  stack: {
     num: "07",
-    eyebrow: "07 · EDUCATION + CERTIFICATIONS",
+    eyebrow: "07 · INSTRUMENTS / 29 TOOLS",
+    heading: "THE STACK",
+    anchor: "stack",
+    intro:
+      "29 instruments in production use across analysis, delivery and AI systems. Every tool on the desk earns its slot.",
+    groups: [
+      {
+        label: "ANALYSIS",
+        tools: [
+          { name: "PYTHON", icon: "/images/stack/python.svg" },
+          { name: "SQL", icon: "/images/stack/sql.svg" },
+          { name: "EXCEL", icon: "/images/stack/excel.svg" },
+          { name: "POWER BI", icon: "/images/stack/powerbi.svg" },
+          { name: "TABLEAU", icon: "/images/stack/tableau.svg" },
+          { name: "POWERPOINT", icon: "/images/stack/powerpoint.svg" },
+        ],
+      },
+      {
+        label: "BUILD & SHIP",
+        tools: [
+          { name: "GITHUB", icon: "/images/stack/github.svg" },
+          { name: "VS CODE", icon: "/images/stack/vscode.svg" },
+          { name: "HUGGING FACE", icon: "/images/stack/huggingface.svg" },
+          { name: "LANGCHAIN", icon: "/images/stack/langchain.svg" },
+          { name: "REPLIT", icon: "/images/stack/replit.svg" },
+          { name: "LOVABLE", icon: "/images/stack/lovable.svg" },
+          { name: "GAMMA", icon: "/images/stack/gamma.webp" },
+          { name: "NOTION", icon: "/images/stack/notion.svg" },
+          { name: "FIGMA", icon: "/images/stack/figma.svg" },
+          { name: "CURSOR", icon: "/images/stack/cursor.svg" },
+        ],
+      },
+      {
+        label: "AI SYSTEMS",
+        tools: [
+          { name: "CLAUDE", icon: "/images/stack/claude.svg" },
+          { name: "CHATGPT", icon: "/images/stack/chatgpt.webp" },
+          { name: "GEMINI", icon: "/images/stack/gemini.svg" },
+          { name: "PERPLEXITY", icon: "/images/stack/perplexity.svg" },
+          { name: "ELEVENLABS", icon: "/images/stack/elevenlabs.webp" },
+          { name: "MIDJOURNEY", icon: "/images/stack/midjourney.svg" },
+          { name: "GOOGLE VEO", icon: "/images/stack/veo.webp" },
+          { name: "KLING", icon: "/images/stack/kling.svg" },
+          { name: "ANTIGRAVITY", icon: "/images/stack/antigravity.webp" },
+          { name: "GROQ", icon: "/images/stack/groq.svg" },
+          { name: "RUNWAY", icon: "/images/stack/runway.webp" },
+          { name: "CANVA", icon: "/images/stack/canva.svg" },
+          { name: "FLOW", icon: "/images/stack/flow.webp" },
+        ],
+      },
+    ],
+  },
+
+  foundations: {
+    num: "08",
+    eyebrow: "08 · EDUCATION + CERTIFICATIONS",
     heading: "FOUNDATIONS",
     anchor: "foundations",
     education: [
@@ -357,44 +464,38 @@ export const SITE: SiteContent = {
         title: "GOOGLE DATA ANALYTICS PROFESSIONAL",
         issuer: "GOOGLE",
         url: "https://coursera.org/share/78db8e4f8d3c7032b542be5f918e7f30",
-        image: "/images/certs/cert-google-data-analytics.png",
       },
       {
         title: "AWS FUNDAMENTALS",
         issuer: "AMAZON WEB SERVICES",
         url: "https://coursera.org/share/5c8ea127d6aa3c38803ae1647f415dfb",
-        image: "/images/certs/cert-aws.png",
       },
       {
         title: "DATA ANALYSIS & VISUALIZATION WITH POWER BI",
         issuer: "MICROSOFT",
         url: "https://coursera.org/share/8c499acd4a0d45dca915dd4b22a42721",
-        image: "/images/certs/cert-power-bi.png",
       },
       {
         title: "PROGRAMMING IN PYTHON",
         issuer: "META",
         url: "https://coursera.org/share/7d14160ccc105fe44c37874948bd6f59",
-        image: "/images/certs/cert-python.png",
       },
       {
         title: "INTRODUCTION TO STATISTICS",
         issuer: "STANFORD UNIVERSITY",
         url: "https://coursera.org/share/ecffa9eb5ec25322207a0e7250757444",
-        image: "/images/certs/cert-statistics.png",
       },
       {
         title: "PREPARING DATA FOR ANALYSIS WITH EXCEL",
         issuer: "MICROSOFT",
         url: "https://coursera.org/share/07f9a3db70c51bc57e533e252d9f044e",
-        image: "/images/certs/cert-excel.png",
       },
     ],
   },
 
   contact: {
-    num: "08",
-    eyebrow: "08 · CONTACT / THE CLOSE",
+    num: "09",
+    eyebrow: "09 · CONTACT / THE CLOSE",
     heading: "THE MARKET IS OPEN",
     anchor: "contact",
     lead: "Building in capital markets or fintech, or running a financial operation that still moves by hand. Either way, let's talk.",
@@ -402,6 +503,7 @@ export const SITE: SiteContent = {
     phone: "+919372040230",
     phoneDisplay: "+91 93720 40230",
     ctaLabel: "GET IN TOUCH",
+    statusLine: "DESK OPEN · MUMBAI · IST",
     form: {
       nameLabel: "FULL NAME",
       emailLabel: "EMAIL ADDRESS",
@@ -419,11 +521,23 @@ export const SITE: SiteContent = {
       { label: "GITHUB / SHRIANSHJENA", href: "https://github.com/shrianshjena", external: true },
       { label: "LINKEDIN / SHRIANSHJENA", href: "https://www.linkedin.com/in/shrianshjena", external: true },
       { label: "+91 93720 40230", href: "tel:+919372040230" },
-      { label: "DOWNLOAD CV", href: "/docs/Shriansh_Jena_Resume.pdf", external: true },
+      { label: "DOWNLOAD RESUME", href: "/docs/Shriansh_Jena_Resume.pdf", external: true },
     ],
-    telemetry: ["DESK · MUMBAI, IN", "NEXT.JS · GSAP · LENIS · SPLINE", "GENERAL SANS + JETBRAINS MONO"],
+    index: [
+      { num: "01", label: "HERO", href: "#hero" },
+      { num: "02", label: "POSITION", href: "#position" },
+      { num: "03", label: "DESK", href: "#desk" },
+      { num: "04", label: "RECORD", href: "#record" },
+      { num: "05", label: "WORK", href: "#production" },
+      { num: "06", label: "LOOP", href: "#loop" },
+      { num: "07", label: "STACK", href: "#stack" },
+      { num: "08", label: "FOUNDATIONS", href: "#foundations" },
+      { num: "09", label: "CONTACT", href: "#contact" },
+    ],
+    telemetry: ["DESK · MUMBAI, IN"],
+    builtBy: "BUILT BY SHRIANSH JENA",
     signoff: "YOU VS YOU · EVERY SESSION",
-    copyright: "© 2026 SHRIANSH JENA",
+    copyright: "© 2026 SHRIANSH JENA · ALL RIGHTS RESERVED",
   },
 
   audio: [

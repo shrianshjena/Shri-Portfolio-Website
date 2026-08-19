@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import type { ContactContent } from "@/content/types";
 import { contactSchema, FIELD_LIMITS } from "@/lib/contact-schema";
+import { Decode } from "@/components/fx/Decode";
+import { ScrambleText } from "@/components/fx/ScrambleText";
 import { MagneticButton } from "@/components/fx/MagneticButton";
 
 /*
@@ -14,6 +16,11 @@ import { MagneticButton } from "@/components/fx/MagneticButton";
  * short-circuits locally without any network request. Success replaces the
  * form; errors offer a direct mailto fallback. The status region is a
  * persistent aria-live container so state changes are announced.
+ *
+ * Motion: field wrappers carry data-rise so the parent section's scoped
+ * entrance stagger picks them up individually; labels and the submit label
+ * decode (text content only, GSAP never touches color here); the focus
+ * underline is CSS-owned on a dedicated span (one engine per property).
  */
 
 interface ContactFormProps {
@@ -27,8 +34,17 @@ const ACCESS_KEY =
   process.env.NEXT_PUBLIC_WEB3FORMS_KEY ??
   "03801fe0-3a26-45af-9472-d1035dad4c4a";
 const MESSAGE_ROWS = 5;
+/* Submit-label re-decode on state change (SEND MESSAGE -> SENDING...). */
+const SUBMIT_DECODE_S = 0.4;
+const FIELD_WRAPPER_CLASSES = "group/field relative";
+/* block keeps the wrapper's bottom flush with the input's underline so the
+ * focus line overlays the border exactly (no inline-block descender gap). */
 const INPUT_CLASSES =
-  "w-full border-0 border-b border-line bg-transparent py-3 text-base text-fg focus:border-steel focus:outline-none";
+  "block w-full border-0 border-b border-line bg-transparent py-3 text-base text-fg focus:outline-none";
+/* CSS-only focus micro-interaction: a steel line draws left-to-right along
+ * the field underline on focus. GSAP never touches these spans. */
+const FOCUS_LINE_CLASSES =
+  "absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-steel transition-transform duration-300 group-focus-within/field:scale-x-100";
 
 export function ContactForm({ data }: ContactFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -91,9 +107,9 @@ export function ContactForm({ data }: ContactFormProps) {
       {status !== "success" ? (
         <form onSubmit={handleSubmit}>
           <div className="space-y-8">
-            <div>
+            <div data-rise className={FIELD_WRAPPER_CLASSES}>
               <label htmlFor="contact-name" className="eyebrow block">
-                {data.form.nameLabel}
+                <Decode tiers="both">{data.form.nameLabel}</Decode>
               </label>
               <input
                 id="contact-name"
@@ -104,10 +120,11 @@ export function ContactForm({ data }: ContactFormProps) {
                 autoComplete="name"
                 className={INPUT_CLASSES}
               />
+              <span aria-hidden="true" className={FOCUS_LINE_CLASSES} />
             </div>
-            <div>
+            <div data-rise className={FIELD_WRAPPER_CLASSES}>
               <label htmlFor="contact-email" className="eyebrow block">
-                {data.form.emailLabel}
+                <Decode tiers="both">{data.form.emailLabel}</Decode>
               </label>
               <input
                 id="contact-email"
@@ -118,10 +135,11 @@ export function ContactForm({ data }: ContactFormProps) {
                 autoComplete="email"
                 className={INPUT_CLASSES}
               />
+              <span aria-hidden="true" className={FOCUS_LINE_CLASSES} />
             </div>
-            <div>
+            <div data-rise className={FIELD_WRAPPER_CLASSES}>
               <label htmlFor="contact-message" className="eyebrow block">
-                {data.form.messageLabel}
+                <Decode tiers="both">{data.form.messageLabel}</Decode>
               </label>
               <textarea
                 id="contact-message"
@@ -131,6 +149,7 @@ export function ContactForm({ data }: ContactFormProps) {
                 maxLength={FIELD_LIMITS.message}
                 className={`${INPUT_CLASSES} resize-none`}
               />
+              <span aria-hidden="true" className={FOCUS_LINE_CLASSES} />
             </div>
           </div>
 
@@ -145,7 +164,7 @@ export function ContactForm({ data }: ContactFormProps) {
             />
           </div>
 
-          <div className="mt-10">
+          <div data-rise className="mt-10">
             <MagneticButton>
               <button
                 type="submit"
@@ -153,9 +172,17 @@ export function ContactForm({ data }: ContactFormProps) {
                 disabled={status === "submitting"}
                 className="pill eyebrow px-10 py-4 !text-xs text-fg transition-colors hover:bg-fg hover:text-canvas disabled:opacity-60"
               >
-                {status === "submitting"
-                  ? data.form.submittingLabel
-                  : data.form.submitLabel}
+                <Decode
+                  key={status}
+                  trigger="play"
+                  play
+                  maxDuration={SUBMIT_DECODE_S}
+                  tiers="both"
+                >
+                  {status === "submitting"
+                    ? data.form.submittingLabel
+                    : data.form.submitLabel}
+                </Decode>
               </button>
             </MagneticButton>
           </div>
@@ -165,9 +192,14 @@ export function ContactForm({ data }: ContactFormProps) {
       <div aria-live="polite" role="status">
         {status === "success" ? (
           <div>
-            <p className="text-2xl uppercase text-fg">
+            <ScrambleText
+              as="p"
+              trigger="play"
+              play
+              className="text-2xl uppercase text-fg"
+            >
               {data.form.successTitle}
-            </p>
+            </ScrambleText>
             <p className="mt-3 max-w-[38ch] leading-relaxed text-muted">
               {data.form.successBody}
             </p>

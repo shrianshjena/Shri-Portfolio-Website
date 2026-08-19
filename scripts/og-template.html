@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face {
+    font-family: "General Sans";
+    src: url("../src/fonts/GeneralSans-Variable.woff2") format("woff2");
+    font-weight: 200 700;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../src/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+    font-weight: 400;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #050a16;
+    color: #f0f0f8;
+    font-family: "General Sans", sans-serif;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+  }
+  .frame {
+    position: absolute; inset: 24px;
+    border: 1px solid rgba(240, 240, 248, 0.16);
+  }
+  .eyebrow {
+    position: absolute; top: 64px; left: 72px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 17px; letter-spacing: 0.24em;
+    color: #78b0f0;
+  }
+  .headline {
+    position: absolute; left: 68px; top: 178px;
+    font-size: 150px; line-height: 0.98;
+    letter-spacing: 0.005em; text-transform: uppercase;
+    font-weight: 400;
+  }
+  .rule {
+    position: absolute; left: 72px; bottom: 118px;
+    width: 220px; height: 2px; background: #1d5bd8;
+  }
+  .metrics {
+    position: absolute; left: 72px; bottom: 66px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 17px; letter-spacing: 0.14em;
+    color: #8090a0;
+    font-variant-numeric: tabular-nums;
+  }
+  .mark {
+    position: absolute; right: 64px; bottom: 56px;
+    width: 64px; height: 64px;
+  }
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <p class="eyebrow">SHRIANSH JENA · DERIVATIVES TRADER · SYSTEMS BUILDER</p>
+  <h1 class="headline">EDGE IS<br />ENGINEERED</h1>
+  <div class="rule"></div>
+  <p class="metrics">BACKTEST CAGR 27.24% · ALERT LATENCY 10S · ISINS 200+ · MUMBAI</p>
+  <img class="mark" src="../src/app/icon.png" alt="" />
+</body>
+</html>

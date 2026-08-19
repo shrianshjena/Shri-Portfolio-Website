@@ -11,10 +11,17 @@ import { cn } from "@/lib/cn";
  */
 interface AudioToggleProps {
   readonly showTitle?: boolean;
+  /* "row" (nav default) seats the readout beside the icon; "stack" centers
+   * it under the icon for the hero bottom-center CTA. */
+  readonly layout?: "row" | "stack";
   readonly className?: string;
 }
 
-export function AudioToggle({ showTitle = false, className }: AudioToggleProps) {
+export function AudioToggle({
+  showTitle = false,
+  layout = "row",
+  className,
+}: AudioToggleProps) {
   const { isPlaying, track, trackIndex, trackCount, toggle } = useAudio();
 
   const readout = `${String(trackIndex + 1).padStart(2, "0")}/${String(trackCount).padStart(2, "0")} ${track.title}`;
@@ -26,7 +33,11 @@ export function AudioToggle({ showTitle = false, className }: AudioToggleProps) 
       aria-pressed={isPlaying}
       aria-label={isPlaying ? "Pause soundtrack" : "Play soundtrack"}
       data-cursor="link"
-      className={cn("group flex items-center gap-3", className)}
+      className={cn(
+        "group flex items-center gap-3",
+        layout === "stack" && "flex-col",
+        className,
+      )}
     >
       <span className="flex size-9 items-center justify-center border border-line-strong transition-colors duration-300 group-hover:border-fg">
         {isPlaying ? (

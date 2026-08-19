@@ -8,6 +8,7 @@ import { useLoading } from "@/components/providers/LoadingProvider";
 import { ScrambleText } from "@/components/fx/ScrambleText";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { HeroVisual } from "./HeroVisual";
+import { HeroAudioCta } from "./HeroAudioCta";
 
 /*
  * Chapter 01. The preloader wipe hands off here: when loading status flips
@@ -44,7 +45,7 @@ export function HeroSection({ data }: { readonly data: HeroContent }) {
       aria-labelledby="hero-heading"
       className="relative flex min-h-svh flex-col justify-center px-6 pb-16 pt-24 md:px-12 lg:px-20"
     >
-      <div className="grid items-center gap-10 lg:grid-cols-[1fr_45%]">
+      <div className="grid items-center gap-10 lg:grid-cols-[1fr_48%]">
         <div className="min-w-0">
           <ScrambleText
             as="p"
@@ -91,14 +92,23 @@ export function HeroSection({ data }: { readonly data: HeroContent }) {
           </div>
         </div>
 
-        <div className="hero-rise relative h-[46svh] lg:h-[70svh]">
+        {/* Negative margins let the canvas bleed toward the top/bottom/right
+         * gutters on desktop so the robot reads larger in the composition. */}
+        <div className="hero-rise relative h-[50svh] lg:h-[82svh] lg:-my-10 lg:-mr-10">
           <HeroVisual posterAlt={data.posterAlt} />
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-6 bottom-6 flex items-end justify-between md:inset-x-12 lg:inset-x-20">
-        <p className="eyebrow !text-[10px] text-muted">{data.audioHint}</p>
-        <p className="eyebrow hidden !text-[10px] text-muted md:block">SCROLL ▼</p>
+      {/* Three-zone bottom bar: empty left balance, the music CTA dead
+       * center (Lovable-style), the scroll cue on the right. */}
+      <div className="pointer-events-none absolute inset-x-6 bottom-6 grid grid-cols-3 items-end md:inset-x-12 lg:inset-x-20">
+        <span aria-hidden="true" />
+        <div className="hero-rise pointer-events-auto justify-self-center">
+          <HeroAudioCta label={data.audioHint} />
+        </div>
+        <p className="eyebrow hidden !text-[10px] text-muted md:block justify-self-end">
+          SCROLL ▼
+        </p>
       </div>
     </section>
   );

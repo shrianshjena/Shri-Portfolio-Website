@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { useLoading } from "@/components/providers/LoadingProvider";
 import { SplineErrorBoundary } from "./SplineErrorBoundary";
 import { MIN_DEVICE_MEMORY_GB } from "@/lib/constants";
 import { MEDIA } from "@/lib/motion";
@@ -11,9 +10,9 @@ import { cn } from "@/lib/cn";
 /*
  * Poster-first hero visual. The poster is the LCP element; the Spline
  * runtime chunk mounts only when ALL gates pass: full motion tier (desktop,
- * fine pointer, no reduced motion), enough device memory, hero in view, and
- * preloader finished. On load the canvas crossfades over the poster, which
- * stays mounted underneath as the instant fallback.
+ * fine pointer, no reduced motion), enough device memory, and hero in view.
+ * On load the canvas crossfades over the poster, which stays mounted
+ * underneath as the instant fallback.
  */
 const LazySplineScene = lazy(() => import("./SplineScene"));
 
@@ -24,12 +23,13 @@ interface HeroVisualProps {
 }
 
 export function HeroVisual({ posterAlt }: HeroVisualProps) {
-  const { status } = useLoading();
   const hostRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const [tierOk, setTierOk] = useState(false);
   const [splineReady, setSplineReady] = useState(false);
   const [posterFailed, setPosterFailed] = useState(false);
+  /* WCAG 2.2.2 user pause for the continuously animating robot. */
+  const [held, setHeld] = useState(false);
 
   useEffect(() => {
     const memory =
@@ -55,7 +55,11 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
     };
   }, []);
 
-  const mountSpline = tierOk && inView && status === "done";
+  /* No preloader-status gate: the preloader holds for 9s behind an opaque
+   * overlay that hides the hero, so mounting as soon as tier + viewport
+   * allow makes that hold the Spline warm-up window. The robot must be
+   * live before the curtain lifts, not start booting after it. */
+  const mountSpline = tierOk && inView;
 
   /* If the tier drops (viewport narrows, reduced motion toggles on), the
    * Spline island unmounts; bring the poster back. */
@@ -75,7 +79,7 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
         priority
         unoptimized
         fetchPriority="high"
-        sizes="(max-width: 1023px) 100vw, 45vw"
+        sizes="(max-width: 1023px) 100vw, 48vw"
         onError={() => setPosterFailed(true)}
         className={cn(
           "object-contain transition-opacity duration-1000",
@@ -91,10 +95,29 @@ export function HeroVisual({ posterAlt }: HeroVisualProps) {
                 splineReady ? "opacity-100" : "opacity-0",
               )}
             >
-              <LazySplineScene onReady={() => setSplineReady(true)} />
+              <LazySplineScene
+                held={held}
+                onReady={() => setSplineReady(true)}
+              />
             </div>
           </Suspense>
         </SplineErrorBoundary>
+      ) : null}
+      {/* HOLD/RUN control (TickerMarquee vocabulary): user pause for the
+       * robot's continuous idle animation, WCAG 2.2.2. Kept outside the
+       * crossfade wrapper so it never sits under an aria-hidden ancestor;
+       * hold wins over every automatic resume inside SplineScene. */}
+      {mountSpline ? (
+        <button
+          type="button"
+          onClick={() => setHeld((value) => !value)}
+          aria-pressed={held}
+          aria-label={held ? "Resume 3D scene" : "Pause 3D scene"}
+          data-cursor="link"
+          className="eyebrow pointer-events-auto absolute bottom-3 right-3 border border-line px-3 py-1.5 !text-[9px] text-steel transition-colors hover:border-line-strong motion-reduce:hidden"
+        >
+          {held ? "RUN ▸" : "HOLD ⏸"}
+        </button>
       ) : null}
     </div>
   );

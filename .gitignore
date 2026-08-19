@@ -18,6 +18,9 @@
 /.next-dist/
 /.build/
 /.dist/
+/.dist2/
+/.dist3/
+/.dist4/
 /out/
 
 # production
